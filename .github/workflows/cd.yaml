@@ -1,0 +1,50 @@
+name: CD
+on:
+  release:
+    types:
+      - published
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  espark-core:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup Python 3
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+      - name: Install dependencies
+        run: make upgrade
+        working-directory: espark-core
+      - name: Build and publish package
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: make publish
+        working-directory: espark-core
+  espark-react:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org/'
+          always-auth: true
+      - name: Install dependencies
+        run: pnpm i
+        working-directory: espark-react
+      - name: Build and publish package
+        run: pnpm publish --no-git-checks
+        working-directory: espark-react

@@ -1,0 +1,15 @@
+# Python
+**/__pycache__/
+
+# VirtualEnv
+**/venv/
+
+# Unit tests
+.pytest_cache/
+.coverage
+coverage.lcov
+
+# Generated
+build/
+dist/
+*.egg-info/

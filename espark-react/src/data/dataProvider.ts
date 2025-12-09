@@ -1,0 +1,73 @@
+import type { DataProvider, } from '@refinedev/core';
+
+import { camelCaseToSnakeCase, snakeCaseToCamelCase, } from '../utils/strings';
+
+export const createDataProvider = (apiEndpoint : string) : DataProvider => ({
+    getApiUrl : () => apiEndpoint,
+    getList   : async ({ resource, pagination, }) => {
+        const query = new URLSearchParams();
+
+        if (pagination && pagination.mode !== 'client' && pagination.mode !== 'off') {
+            if (pagination.pageSize) {
+                query.append('limit', pagination.pageSize.toString());
+                if (pagination.currentPage) query.append('offset', ((pagination.currentPage - 1) * pagination.pageSize).toString());
+            }
+        }
+
+        const response = await fetch(`${apiEndpoint}/${resource}${query.size ? `?${camelCaseToSnakeCase(query.toString())}` : ''}`);
+
+        if (response.ok) {
+            const data = await response.json();
+
+            return {
+                data  : data.map((item : any) => snakeCaseToCamelCase(item)),
+                total : parseInt(response.headers.get('X-Total-Count') ?? data.length, 10),
+            };
+        }
+
+        throw response;
+    },
+    // @ts-ignore
+    getOne    : async ({ resource, id, }) => {
+        const response = await fetch(`${apiEndpoint}/${resource}/${id}`);
+
+        if (response.ok) return {
+            data : snakeCaseToCamelCase(await response.json()),
+        };
+
+        throw response;
+    },
+    create    : async () => {
+        throw new Error('Not implemented');
+    },
+    // @ts-ignore
+    update    : async ({ resource, id, variables, meta, }) => {
+        const response = await fetch(`${apiEndpoint}/${resource}/${id}`, {
+            method  : meta?.method ?? 'PUT',
+            headers : {
+                'Content-Type' : 'application/json',
+                ...(meta?.headers ?? {}),
+            },
+            // @ts-ignore
+            body    : JSON.stringify(camelCaseToSnakeCase(variables)),
+        });
+
+        if (response.ok) return {
+            data : snakeCaseToCamelCase(await response.json()),
+        };
+
+        throw response;
+    },
+    // @ts-ignore
+    deleteOne : async ({ resource, id, meta, }) => {
+        const response = await fetch(`${apiEndpoint}/${resource}/${id}`, {
+            method : meta?.method ?? 'DELETE',
+        });
+
+        if (response.ok) return {
+            data : snakeCaseToCamelCase(await response.json()),
+        };
+
+        throw response;
+    },
+});

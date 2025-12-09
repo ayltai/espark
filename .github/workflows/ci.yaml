@@ -1,0 +1,87 @@
+name: CI
+on:
+  push:
+    branches:
+      - '*'
+    tags-ignore:
+      - v**
+jobs:
+  espark-core:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup Python 3
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+      - name: Install dependencies
+        run: make upgrade
+        working-directory: espark-core
+      - name: Linting
+        run: make lint
+        working-directory: espark-core
+      - name: Unit tests
+        run: make test
+        working-directory: espark-core
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: coverage-core.lcov
+          path: espark-core/coverage.lcov
+  espark-node:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup Python 3
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+      - name: Install dependencies
+        run: make upgrade
+        working-directory: espark-node
+      - name: Linting
+        run: make lint
+        working-directory: espark-node
+      - name: Set environment to Unix
+        run: |
+          sed -i "1s/.*/ENVIRONMENT : str = 'unix'/" espark-node/esparknode/configs.py
+      - name: Unit tests
+        run: make test
+        working-directory: espark-node
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: coverage-node.lcov
+          path: espark-node/coverage.lcov
+  espark-react:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+      - name: Install dependencies
+        run: pnpm i
+        working-directory: espark-react
+      - name: Test
+        run: pnpm test
+        working-directory: espark-react
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: coverage-react
+          path: espark-react/coverage
