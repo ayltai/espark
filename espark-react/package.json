@@ -1,6 +1,6 @@
 {
     "name"             : "espark-react",
-    "version"          : "0.3.0",
+    "version"          : "0.3.1",
     "author"           : {
         "name" : "Alan Tai"
     },
@@ -48,7 +48,7 @@
         "antd"                              : "^6.1.0",
         "date-fns"                          : "^4.1.0",
         "i18next"                           : "^25.7.2",
-        "react-i18next"                     : "^16.4.0",
+        "react-i18next"                     : "^16.4.1",
         "react-redux"                       : "^9.2.0",
         "react-router"                      : "^7.10.1",
         "string-to-color"                   : "^2.2.2"

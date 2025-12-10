@@ -1,6 +1,6 @@
 autopep8==2.3.2
 esptool==5.1.0
-mpremote==1.26.1
+mpremote==1.27.0
 paho-mqtt==2.1.0
 pycodestyle==2.14.0
 pylint==4.0.4
