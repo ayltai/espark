@@ -59,9 +59,12 @@ export default defineConfig({
         },
         rollupOptions : {
             external : [
+                'antd',
+                'i18next',
                 'react',
                 'react/jsx-runtime',
                 'react-dom',
+                'react-i18next',
                 'react-router-dom',
             ],
             output   : {
