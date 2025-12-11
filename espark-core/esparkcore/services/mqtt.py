@@ -50,7 +50,14 @@ class MQTTManager:
 
                     await self.device_repo.add(session, device)
 
-                latest_version  = await self.version_repo.get(session, AppVersion.id == payload['app_name'])
+                latest_version = await self.version_repo.get(session, AppVersion.id == payload['app_name'])
+                if not latest_version:
+                    latest_version = AppVersion()
+                    latest_version.id      = payload['app_name']
+                    latest_version.version = payload['app_version']
+
+                    await self.version_repo.add(session, latest_version)
+
                 current_version = Version(payload['app_version'])
 
                 if Version(latest_version.version) > current_version:
