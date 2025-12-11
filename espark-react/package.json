@@ -1,6 +1,6 @@
 {
     "name"             : "espark-react",
-    "version"          : "0.4.1",
+    "version"          : "0.4.2",
     "author"           : {
         "name" : "Alan Tai"
     },
@@ -33,11 +33,8 @@
         "build"   : "vite build && tsc -p tsconfig.build.json"
     },
     "peerDependencies" : {
-        "antd"          : "^6.1.0",
-        "i18next"       : "^25.7.2",
-        "react"         : "^19.2.0",
-        "react-dom"     : "^19.2.0",
-        "react-i18next" : "^16.4.1"
+        "react"     : "^19.2.0",
+        "react-dom" : "^19.2.0"
     },
     "dependencies"     : {
         "@ant-design/icons"                 : "^6.1.0",
@@ -48,7 +45,10 @@
         "@refinedev/core"                   : "^5.0.6",
         "@refinedev/react-router"           : "^2.0.3",
         "@tanstack/react-query"             : "^5.90.11",
+        "antd"                              : "^6.1.0",
         "date-fns"                          : "^4.1.0",
+        "i18next"                           : "^25.7.2",
+        "react-i18next"                     : "^16.4.1",
         "react-redux"                       : "^9.2.0",
         "react-router"                      : "^7.10.1",
         "string-to-color"                   : "^2.2.2"
