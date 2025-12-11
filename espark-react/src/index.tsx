@@ -1,9 +1,11 @@
-import { useEffect, useState, } from 'react';
+import type { ResourceProps, } from '@refinedev/core';
+import type { ThemeConfig, } from 'antd';
+import { type ReactNode, useEffect, useState, } from 'react';
+import type { RouteObject, } from 'react-router';
 
 import { MainApp, } from './App';
 import { apply, } from './i18n';
 import en from './i18n/en.json';
-import type { AppProps, } from './data/models';
 import { handleError, } from './utils';
 
 export const EsparkApp = ({
@@ -13,7 +15,17 @@ export const EsparkApp = ({
     userResources = [],
     userRoutes    = [],
     apiEndpoint,
-} : AppProps) => {
+} : {
+    themeConfig?              : ThemeConfig,
+    title?                    : {
+        icon? : ReactNode,
+        text? : ReactNode,
+    },
+    telemetryDataTransformer? : (value : number, dataType : string) => string,
+    userResources?            : ResourceProps[],
+    userRoutes?               : RouteObject[],
+    apiEndpoint               : string,
+}) => {
     const [ i18nInitialized, setI18nInitialized, ] = useState(false);
 
     useEffect(() => {

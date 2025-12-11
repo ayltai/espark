@@ -1,13 +1,13 @@
 import { ThemedLayout, useNotificationProvider, } from '@refinedev/antd';
-import { type I18nProvider, Refine, } from '@refinedev/core';
+import { type I18nProvider, Refine, type ResourceProps, } from '@refinedev/core';
 import routerProvider from '@refinedev/react-router';
-import { App, ConfigProvider, } from 'antd';
+import { App, ConfigProvider, type ThemeConfig, } from 'antd';
+import type { ReactNode, } from 'react';
 import { useTranslation, } from 'react-i18next';
-import { createHashRouter, Navigate, Outlet, RouterProvider, } from 'react-router';
-
-import type { AppProps, } from './data/models';
+import { createHashRouter, Navigate, Outlet, type RouteObject, RouterProvider, } from 'react-router';
 import { createDataProvider, } from './data';
 import { createRoutes, resources, } from './routes';
+
 
 const MainLayout = () => (
     <ThemedLayout
@@ -24,7 +24,17 @@ export const MainApp = ({
     userResources = [],
     userRoutes    = [],
     apiEndpoint,
-} : AppProps) => {
+} : {
+    themeConfig?              : ThemeConfig,
+    title?                    : {
+        icon? : ReactNode,
+        text? : ReactNode,
+    },
+    telemetryDataTransformer? : (value : number, dataType : string) => string,
+    userResources?            : ResourceProps[],
+    userRoutes?               : RouteObject[],
+    apiEndpoint               : string,
+}) => {
     const RefineProvider = () => {
         const { i18n, t, } = useTranslation();
 
