@@ -17,6 +17,16 @@ export const DeviceEdit = () => {
                         <Input width='100%' />
                     </Form.Item>
                     <Form.Item<Device>
+                        name='appName'
+                        label={t('labels.device.appName')}>
+                        <Input width='100%' />
+                    </Form.Item>
+                    <Form.Item<Device>
+                        name='appVersion'
+                        label={t('labels.device.appVersion')}>
+                        <Input width='100%' />
+                    </Form.Item>
+                    <Form.Item<Device>
                         name='capabilities'
                         label={t('labels.device.capabilities')}
                         tooltip={t('labels.device.capabilities.tip')}
