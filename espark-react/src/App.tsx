@@ -1,13 +1,13 @@
 import { ThemedLayout, useNotificationProvider, } from '@refinedev/antd';
-import { type I18nProvider, Refine, type ResourceProps, } from '@refinedev/core';
+import { type I18nProvider, Refine, } from '@refinedev/core';
 import routerProvider from '@refinedev/react-router';
-import { App, ConfigProvider, type ThemeConfig, } from 'antd';
-import { type ReactNode, } from 'react';
+import { App, ConfigProvider, } from 'antd';
 import { useTranslation, } from 'react-i18next';
-import { createHashRouter, Navigate, Outlet, type RouteObject, RouterProvider, } from 'react-router';
+import { createHashRouter, Navigate, Outlet, RouterProvider, } from 'react-router';
 
+import type { AppProps, } from './data/models';
 import { createDataProvider, } from './data';
-import { resources, routes, } from './routes';
+import { createRoutes, resources, } from './routes';
 
 const MainLayout = () => (
     <ThemedLayout
@@ -20,19 +20,11 @@ const MainLayout = () => (
 export const MainApp = ({
     themeConfig,
     title,
+    telemetryDataTransformer,
     userResources = [],
     userRoutes    = [],
     apiEndpoint,
-} : {
-    themeConfig?  : ThemeConfig,
-    title?        : {
-        icon? : ReactNode,
-        text? : ReactNode,
-    },
-    userResources? : ResourceProps[],
-    userRoutes?    : RouteObject[],
-    apiEndpoint    : string,
-}) => {
+} : AppProps) => {
     const RefineProvider = () => {
         const { i18n, t, } = useTranslation();
 
@@ -81,7 +73,7 @@ export const MainApp = ({
             children  : [
                 {
                     Component : MainLayout,
-                    children  : routes,
+                    children  : createRoutes(telemetryDataTransformer),
                 },
             ],
         }, {

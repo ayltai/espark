@@ -1,29 +1,19 @@
-import { type ResourceProps, } from '@refinedev/core';
-import { type ThemeConfig, } from 'antd';
-import { type ReactNode, useEffect, useState, } from 'react';
-import { type RouteObject, } from 'react-router';
+import { useEffect, useState, } from 'react';
 
 import { MainApp, } from './App';
 import { apply, } from './i18n';
 import en from './i18n/en.json';
+import type { AppProps, } from './data/models';
 import { handleError, } from './utils';
 
 export const EsparkApp = ({
     themeConfig,
     title,
+    telemetryDataTransformer,
     userResources = [],
     userRoutes    = [],
     apiEndpoint,
-} : {
-    themeConfig?   : ThemeConfig,
-    title?         : {
-        icon? : ReactNode,
-        text? : ReactNode,
-    },
-    userResources? : ResourceProps[],
-    userRoutes?    : RouteObject[],
-    apiEndpoint    : string,
-}) => {
+} : AppProps) => {
     const [ i18nInitialized, setI18nInitialized, ] = useState(false);
 
     useEffect(() => {
@@ -45,6 +35,7 @@ export const EsparkApp = ({
         <MainApp
             title={title}
             themeConfig={themeConfig}
+            telemetryDataTransformer={telemetryDataTransformer}
             userResources={userResources}
             userRoutes={userRoutes}
             apiEndpoint={apiEndpoint} />

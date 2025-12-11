@@ -1,27 +1,29 @@
 from asyncio import create_task, gather, Queue, sleep
 from datetime import datetime, timezone
-from json import JSONDecodeError, loads
+from json import dumps, JSONDecodeError, loads
 from os import getenv
 from uuid import getnode
 
 from aiomqtt import Client, MqttError
+from packaging.version import Version
 
-from ..constants import ENV_MQTT_HOST, ENV_MQTT_PORT, TOPIC_CRASH, TOPIC_REGISTRATION, TOPIC_TELEMETRY
+from ..constants import ENV_MQTT_HOST, ENV_MQTT_PORT, TOPIC_CRASH, TOPIC_OTP, TOPIC_REGISTRATION, TOPIC_TELEMETRY
 from ..data import async_session
-from ..data.models import Device, Telemetry
-from ..data.repositories import DeviceRepository, TelemetryRepository
+from ..data.models import AppVersion, Device, Telemetry
+from ..data.repositories import AppVersionRepository, DeviceRepository, TelemetryRepository
 from ..utils import log_debug, log_error
 
 MQTT_RETRY_DELAY: int = 5
 
 
 class MQTTManager:
-    def __init__(self, device_repo: DeviceRepository = None, telemetry_repo: TelemetryRepository = None):
-        self.mqtt_host      : str                 = getenv(ENV_MQTT_HOST, 'localhost')
-        self.mqtt_port      : int                 = int(getenv(ENV_MQTT_PORT, '1883'))
-        self.device_repo    : DeviceRepository    = device_repo
-        self.telemetry_repo : TelemetryRepository = telemetry_repo
-        self.queue          : Queue               = Queue()
+    def __init__(self, version_repo: AppVersionRepository = None, device_repo: DeviceRepository = None, telemetry_repo: TelemetryRepository = None):
+        self.mqtt_host      : str                  = getenv(ENV_MQTT_HOST, 'localhost')
+        self.mqtt_port      : int                  = int(getenv(ENV_MQTT_PORT, '1883'))
+        self.version_repo   : AppVersionRepository = version_repo if version_repo else AppVersionRepository()
+        self.device_repo    : DeviceRepository     = device_repo if device_repo else DeviceRepository()
+        self.telemetry_repo : TelemetryRepository  = telemetry_repo if telemetry_repo else TelemetryRepository()
+        self.queue          : Queue                = Queue()
 
     async def _handle_registration(self, device_id: str, payload: dict) -> None:
         try:
@@ -30,6 +32,8 @@ class MQTTManager:
             async with async_session() as session:
                 device = await self.device_repo.get(session, Device.id == device_id)
                 if device:
+                    device.app_name     = payload['app_name']
+                    device.app_version  = payload['app_version']
                     device.capabilities = payload['capabilities']
                     device.last_seen    = datetime.now(timezone.utc)
 
@@ -39,10 +43,26 @@ class MQTTManager:
 
                     device.id           = device_id
                     device.display_name = None
+                    device.app_name     = payload['app_name']
+                    device.app_version  = payload['app_version']
                     device.capabilities = payload['capabilities']
                     device.last_seen    = datetime.now(timezone.utc)
 
                     await self.device_repo.add(session, device)
+
+                latest_version  = await self.version_repo.get(session, AppVersion.id == payload['app_name'])
+                current_version = Version(payload['app_version'])
+
+                if Version(latest_version.version) > current_version:
+                    log_debug(f'Device {device_id} is running an outdated version ({current_version} < {latest_version.version})')
+
+                    async with Client(self.mqtt_host, self.mqtt_port, identifier=f'espark-core-{hex(getnode())}') as client:
+                        await client.publish(f'{TOPIC_OTP}/{device_id}', dumps({
+                            'device_id'    : device_id,
+                            'app_name'     : payload['app_name'],
+                            'app_version'  : latest_version.version,
+                            'download_url' : None,
+                        }), qos=1)
         # pylint: disable=broad-exception-caught
         except Exception as e:
             log_error(e)

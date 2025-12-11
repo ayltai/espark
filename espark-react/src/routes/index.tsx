@@ -23,7 +23,7 @@ export const resources = [
     },
 ];
 
-export const routes = [
+export const createRoutes = (transformer? : (value : number, dataType : string) => string) => [
     {
         path     : 'devices',
         children : [
@@ -42,8 +42,8 @@ export const routes = [
         path     : 'telemetry',
         children : [
             {
-                index     : true,
-                Component : TelemetryList,
+                index   : true,
+                element : <TelemetryList dataTransformer={transformer} />,
             },
         ],
     },

@@ -7,6 +7,7 @@ from esparknode.constants import TOPIC_ACTION, TOPIC_DEVICE
 from esparknode.networks.base_mqtt import BaseMQTTManager
 from esparknode.networks.dummy_bluetooth import BluetoothManager
 from esparknode.networks.dummy_wifi import WiFiManager
+from esparknode.sensors.base_sensor import BaseSensor
 from esparknode.utils.base_sleeper import BaseSleeper
 from esparknode.utils.dummy_watchdog import Watchdog
 
@@ -36,15 +37,24 @@ class DummyMQTT(BaseMQTTManager):
         self.published.append((topic, msg))
 
 
+class DummySensor(BaseSensor):
+    def __init__(self, data):
+        self._data = data
+
+    def read(self):
+        return self._data
+
+
 @fixture
 def node():
     return BaseNode(
-        device_id='dev1',
-        sleeper=DummySleeper(),
-        watchdog=watchdog,
-        wifi_manager=wifi_manager,
-        mqtt_manager=DummyMQTT('dev1', 'mqtt://test'),
-        bluetooth_manager=BluetoothManager(),
+        device_id         = 'dev1',
+        sleeper           = DummySleeper(),
+        watchdog          = watchdog,
+        wifi_manager      = wifi_manager,
+        mqtt_manager      = DummyMQTT('dev1', 'mqtt://test'),
+        bluetooth_manager = BluetoothManager(),
+        sensors           = [DummySensor({'temperature': 25, 'humidity': 50})]
     )
 
 
@@ -52,6 +62,17 @@ def test_register_publishes(node: BaseNode):
     node.register()
 
     assert any('registration' in topic for topic, _ in node.mqtt_manager.published)
+
+
+def test_telemetry_publishes(node: BaseNode):
+    mqtt_manager = node.mqtt_manager
+    mqtt_manager.publish = MagicMock()
+
+    node.publish_telemetry()
+
+    calls = mqtt_manager.publish.call_args_list
+    assert any('temperature' in str(call) for call in calls)
+    assert any('humidity' in str(call) for call in calls)
 
 
 def test_on_mqtt_message_parameter_update(node: BaseNode):

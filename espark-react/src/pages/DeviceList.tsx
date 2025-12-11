@@ -71,6 +71,14 @@ export const DeviceList = () => {
                         }} />
                     <Table.Column<Device>
                         width={160}
+                        dataIndex='appName'
+                        title={t('labels.device.appName')} />
+                    <Table.Column<Device>
+                        width={120}
+                        dataIndex='appVersion'
+                        title={t('labels.device.appVersion')} />
+                    <Table.Column<Device>
+                        width={160}
                         dataIndex='capabilities'
                         title={t('labels.device.capabilities')}
                         render={(value : string) => value ? (

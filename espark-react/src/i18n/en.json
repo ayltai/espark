@@ -6,6 +6,8 @@
     "labels.device.status"               : "Status",
     "labels.device.id"                   : "Device ID",
     "labels.device.displayName"          : "Display Name",
+    "labels.device.appName"              : "Application Name",
+    "labels.device.appVersion"           : "Application Version",
     "labels.device.capabilities"         : "Capabilities",
     "labels.device.capabilities.tip"     : "Define device-specific capabilities",
     "labels.device.parameters"           : "Parameters",

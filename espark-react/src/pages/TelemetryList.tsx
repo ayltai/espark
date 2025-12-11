@@ -8,7 +8,11 @@ import type { Device, Telemetry, } from '../data/models';
 import { formatMacAddress, } from '../utils/strings';
 import { ResourceList, } from './ResourceList';
 
-export const TelemetryList = () => {
+export const TelemetryList = ({
+    dataTransformer,
+} : {
+    dataTransformer? : (value : number, dataType : string) => string,
+}) => {
     const { result : { data, }, } = useList<Device>({
         resource : 'devices',
     });
@@ -64,7 +68,10 @@ export const TelemetryList = () => {
                         width={150}
                         dataIndex='value'
                         title={t('labels.telemetry.value')}
-                        render={value => <Typography.Text>{(value / 100.0).toFixed(2)}</Typography.Text>} />
+                        render={(value : number, telemetry : Telemetry) => (
+                            <Typography.Text>
+                                {dataTransformer ? dataTransformer(value, telemetry.dataType) : (value / 100.0).toFixed(2)}
+                            </Typography.Text>)} />
                     <Table.Column<Telemetry>
                         width={200}
                         dataIndex='timestamp'

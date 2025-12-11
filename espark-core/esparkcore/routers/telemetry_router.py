@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from typing import cast, Sequence
+from typing import Sequence
 
 from fastapi import Depends, Query, Response
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -28,7 +28,7 @@ class TelemetryRouter(BaseRouter):
                 capabilities = device.capabilities.split(',') if device.capabilities else []
                 for data_type in capabilities:
                     if not data_type.startswith('action_'):
-                        telemetry = await cast(TelemetryRepository, self.repo).get_latest_for_device(session, device.id, data_type)
+                        telemetry = await self.repo.get_latest_for_device(session, device.id, data_type)
                         if telemetry:
                             if telemetry.timestamp.tzinfo is None:
                                 telemetry.timestamp = telemetry.timestamp.replace(tzinfo=timezone.utc)
