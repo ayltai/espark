@@ -22,6 +22,8 @@
     "labels.telemetry.timestamp"         : "Timestamp",
     "labels.telemetry.dataType"          : "Data Type",
     "labels.telemetry.value"             : "Value",
+    "labels.apps.appName"                : "Application Name",
+    "labels.apps.appVersion"             : "Application Version",
     "placeholders.notSet"                : "(Not set)",
     "errors.required"                    : "{{field}} is required.",
     "errors.invalidFormat"               : "{{field}} has an invalid format.",

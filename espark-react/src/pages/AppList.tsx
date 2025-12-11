@@ -34,6 +34,7 @@ export const AppList = () => {
                             );
                         }} />
                     <Table.Column<AppVersion>
+                        width={250}
                         dataIndex='version'
                         title={t('labels.apps.appVersion')} />
                 </>

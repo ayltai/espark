@@ -1,4 +1,4 @@
-import { faCircleUp, faMicrochip, faTemperatureFull, } from '@fortawesome/free-solid-svg-icons';
+import { faCloudArrowUp, faMicrochip, faTemperatureFull, } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon, } from '@fortawesome/react-fontawesome';
 
 import { AppEdit, AppList, AppShow, DeviceEdit, DeviceList, DeviceShow, TelemetryList, } from '../pages';
@@ -23,7 +23,7 @@ export const resources = [
     }, {
         name : 'apps',
         meta : {
-            icon  : <FontAwesomeIcon icon={faCircleUp} />,
+            icon  : <FontAwesomeIcon icon={faCloudArrowUp} />,
             label : 'resources.apps',
         },
         list : '/apps',
