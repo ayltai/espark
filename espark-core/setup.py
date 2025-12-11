@@ -10,7 +10,7 @@ extra_requirements      = (root / 'requirements.dev.txt').read_text().splitlines
 
 setup(
     name='espark-core',
-    version='0.4.5',
+    version='0.4.6',
     description='The core module of the Espark ESP32-based IoT device management framework.',
     long_description=(root / 'README.md').read_text(),
     long_description_content_type='text/markdown',

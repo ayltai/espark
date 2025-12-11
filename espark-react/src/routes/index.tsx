@@ -1,7 +1,7 @@
-import { faMicrochip, faTemperatureFull, } from '@fortawesome/free-solid-svg-icons';
+import { faCircleUp, faMicrochip, faTemperatureFull, } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon, } from '@fortawesome/react-fontawesome';
 
-import { DeviceEdit, DeviceList, DeviceShow, TelemetryList, } from '../pages';
+import { AppEdit, AppList, AppShow, DeviceEdit, DeviceList, DeviceShow, TelemetryList, } from '../pages';
 
 export const resources = [
     {
@@ -20,6 +20,15 @@ export const resources = [
             label : 'resources.telemetry',
         },
         list : '/telemetry',
+    }, {
+        name : 'apps',
+        meta : {
+            icon  : <FontAwesomeIcon icon={faCircleUp} />,
+            label : 'resources.apps',
+        },
+        list : '/apps',
+        edit : '/apps/edit/:id',
+        show : '/apps/show/:id',
     },
 ];
 
@@ -44,6 +53,20 @@ export const createRoutes = (transformer? : (value : number, dataType : string) 
             {
                 index   : true,
                 element : <TelemetryList dataTransformer={transformer} />,
+            },
+        ],
+    }, {
+        path     : 'apps',
+        children : [
+            {
+                index     : true,
+                Component : AppList,
+            }, {
+                path      : 'edit/:id',
+                Component : AppEdit,
+            }, {
+                path      : 'show/:id',
+                Component : AppShow,
             },
         ],
     },
