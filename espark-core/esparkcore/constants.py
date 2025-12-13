@@ -1,6 +1,7 @@
 ENV_DATABASE_URL : str = 'DATABASE_URL'
 ENV_MQTT_HOST    : str = 'MQTT_HOST'
 ENV_MQTT_PORT    : str = 'MQTT_PORT'
+ENV_UPLOAD_PATH  : str = 'UPLOAD_PATH'
 
 TOPIC_ACTION       : str = 'espark/action'
 TOPIC_DEVICE       : str = 'espark/device'

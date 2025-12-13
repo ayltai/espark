@@ -60,7 +60,9 @@ export const TelemetryList = ({
                         dataIndex='dataType'
                         title={t('labels.telemetry.dataType')}
                         render={(value : string) => (
-                            <Tag color={stringToColour(value)}>
+                            <Tag
+                                color={stringToColour(value)}
+                                variant='solid'>
                                 {value}
                             </Tag>
                         )} />

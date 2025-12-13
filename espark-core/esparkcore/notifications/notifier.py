@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 class BaseNotifier(ABC):
     @abstractmethod
-    async def notify(self, device_id: str, event_type: str, value: int, **kwargs) -> None:
+    async def notify(self, device_id: str, event_type: str, value: int) -> None:
         """
         Send a notification for an event.
 

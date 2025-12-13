@@ -23,12 +23,12 @@ export const DeviceList = () => {
                         dataIndex='lastSeen'
                         title={t('labels.device.status')}
                         align='center'
-                        render={(value : string) => new Date().getTime() - new Date(value).getTime() > 2 * 24 * 60 * 60 * 1000 ? (
+                        render={(value : string) => new Date().getTime() - new Date(value).getTime() > 24 * 60 * 60 * 1000 ? (
                             <CloseCircleFilled style={{
                                 fontSize : 16,
                                 color    : '#f44336',
                             }} />
-                        ) : new Date().getTime() - new Date(value).getTime() > 24 * 60 * 60 * 1000 ? (
+                        ) : new Date().getTime() - new Date(value).getTime() > 45 * 60 * 1000 ? (
                             <CheckCircleFilled style={{
                                 fontSize : 16,
                                 color    : '#ffeb3b',
@@ -72,7 +72,27 @@ export const DeviceList = () => {
                     <Table.Column<Device>
                         width={200}
                         dataIndex='appName'
-                        title={t('labels.device.appName')} />
+                        title={t('labels.device.appName')}
+                        render={value => {
+                            if (value) {
+                                const handleClick = () => show('apps', value);
+
+                                return (
+                                    <Button
+                                        style={{
+                                            paddingLeft  : 0,
+                                            paddingRight : 0,
+                                        }}
+                                        size='small'
+                                        type='link'
+                                        onClick={handleClick}>
+                                        {value ?? t('placeholders.notSet')}
+                                    </Button>
+                                );
+                            }
+
+                            return '-';
+                        }} />
                     <Table.Column<Device>
                         width={200}
                         dataIndex='appVersion'
