@@ -4,7 +4,7 @@ from sqlmodel import Field, SQLModel
 
 
 class Trigger(SQLModel, table=True):
-    id               : int           = Field(primary_key=True, description='Unique identifier for the trigger')
+    id               : Optional[int] = Field(primary_key=True, description='Unique identifier for the trigger')
     name             : str           = Field(index=True, unique=True, description='Name of the trigger')
     device_id        : Optional[str] = Field(index=True, default=None, description='Identifier of the associated device')
     data_type        : Optional[str] = Field(index=True, default=None, description='Type of telemetry data the trigger monitors (e.g., temperature, humidity)')
