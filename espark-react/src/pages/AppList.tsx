@@ -16,7 +16,7 @@ export const AppList = () => {
                 <>
                     <Table.Column<AppVersion>
                         dataIndex='id'
-                        title={t('labels.apps.appName')}
+                        title={t('labels.app.appName')}
                         render={(value, record) => {
                             const handleClick = () => show('apps', record.id);
 
@@ -36,7 +36,7 @@ export const AppList = () => {
                     <Table.Column<AppVersion>
                         width={250}
                         dataIndex='version'
-                        title={t('labels.apps.appVersion')} />
+                        title={t('labels.app.appVersion')} />
                 </>
             )}
         </ResourceList>

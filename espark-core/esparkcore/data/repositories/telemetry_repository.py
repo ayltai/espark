@@ -2,7 +2,7 @@ from typing import Optional, Sequence
 
 from sqlalchemy import ColumnElement
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlmodel import and_
+from sqlmodel import and_, select
 
 from ..models import Telemetry
 from .base_repository import AsyncRepository
@@ -23,3 +23,26 @@ class TelemetryRepository(AsyncRepository[Telemetry]):
             order_by = Telemetry.timestamp.desc()
 
         return await super().list(session, *conditions, offset=offset, order_by=order_by, limit=limit)
+
+    async def search(self, session: AsyncSession, device_id: str = None, data_type: str = None, condition: str = None, value: int = None):
+        query = select(self.model)
+
+        if device_id is not None:
+            query = query.where(Telemetry.device_id == device_id)
+
+        if data_type is not None:
+            query = query.where(Telemetry.data_type == data_type)
+
+        if condition is not None and value is not None:
+            if condition == '<':
+                query = query.where(Telemetry.value < value)
+            elif condition == '<=':
+                query = query.where(Telemetry.value <= value)
+            elif condition == '==':
+                query = query.where(Telemetry.value == value)
+            elif condition == '>=':
+                query = query.where(Telemetry.value >= value)
+            elif condition == '>':
+                query = query.where(Telemetry.value > value)
+
+        return (await session.execute(query)).scalars().all()

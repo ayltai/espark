@@ -98,6 +98,15 @@ export const DeviceList = () => {
                         dataIndex='appVersion'
                         title={t('labels.device.appVersion')} />
                     <Table.Column<Device>
+                        width={150}
+                        dataIndex='battery'
+                        title={t('labels.device.battery')}
+                        render={(value : number) => value != null ? (
+                            <Typography.Text>
+                                {(value / 100.0).toFixed(0)}%
+                            </Typography.Text>
+                        ) : '-'} />
+                    <Table.Column<Device>
                         width={200}
                         dataIndex='capabilities'
                         title={t('labels.device.capabilities')}

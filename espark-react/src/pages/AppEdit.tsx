@@ -13,12 +13,12 @@ export const AppEdit = () => {
                 <>
                     <Form.Item<AppVersion>
                         name='id'
-                        label={t('labels.apps.appName')}>
+                        label={t('labels.app.appName')}>
                         <Input width='100%' />
                     </Form.Item>
                     <Form.Item<AppVersion>
                         name='version'
-                        label={t('labels.apps.appVersion')}>
+                        label={t('labels.app.appVersion')}>
                         <Input width='100%' />
                     </Form.Item>
                 </>

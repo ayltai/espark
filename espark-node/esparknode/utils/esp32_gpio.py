@@ -4,10 +4,13 @@ from machine import Pin
 
 class GpioPin:
     def __init__(self, pin: int):
-        self.pin = Pin(pin, Pin.OUT)
+        self.pin = pin
 
     def set_high(self):
-        self.pin.value(1)
+        Pin(self.pin, Pin.OUT, value=1)
 
     def set_low(self):
-        self.pin.value(0)
+        Pin(self.pin, Pin.OUT, value=0)
+
+    def deinit(self):
+        Pin(self.pin, Pin.IN, pull=None)

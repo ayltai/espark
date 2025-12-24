@@ -16,13 +16,6 @@ vi.mock('@refinedev/core', () => ({
     }),
 }));
 
-fetchMock.mockResponseOnce(JSON.stringify({
-    ok   : true,
-    json : () => Promise.resolve([
-        1,
-    ]),
-}));
-
 let resourceListData : Record<string, boolean | string | number>[] = [
     {
         id           : 'AABBCCDDEEFF',

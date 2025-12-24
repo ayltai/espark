@@ -6,4 +6,5 @@ export type Device = {
     capabilities? : string,
     parameters?   : Record<string, string | number | boolean>,
     lastSeen      : string,
+    battery?      : number,
 };

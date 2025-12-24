@@ -14,7 +14,7 @@ export const createDataProvider = (apiEndpoint : string) : DataProvider => ({
             }
         }
 
-        const response = await fetch(`${apiEndpoint}/${resource}${query.size ? `?${camelCaseToSnakeCase(query.toString())}` : ''}`);
+        const response = await fetch(`${apiEndpoint}/${resource}${resource === 'devices' ? '/all' : ''}${query.size ? `?${camelCaseToSnakeCase(query.toString())}` : ''}`);
 
         if (response.ok) {
             const data = await response.json();
@@ -37,8 +37,23 @@ export const createDataProvider = (apiEndpoint : string) : DataProvider => ({
 
         throw response;
     },
-    create    : async () => {
-        throw new Error('Not implemented');
+    // @ts-ignore
+    create    : async ({ resource, variables, meta, }) => {
+        const response = await fetch(`${apiEndpoint}/${resource}`, {
+            method  : meta?.method ?? 'POST',
+            headers : {
+                'Content-Type' : 'application/json',
+                ...(meta?.headers ?? {}),
+            },
+            // @ts-ignore
+            body    : JSON.stringify(camelCaseToSnakeCase(variables)),
+        });
+
+        if (response.status === 201) return {
+            data : snakeCaseToCamelCase(await response.json()),
+        };
+
+        throw response;
     },
     // @ts-ignore
     update    : async ({ resource, id, variables, meta, }) => {

@@ -7,23 +7,26 @@ from uuid import getnode
 from aiomqtt import Client, MqttError
 from packaging.version import Version
 
-from ..constants import ENV_MQTT_HOST, ENV_MQTT_PORT, TOPIC_CRASH, TOPIC_OTP, TOPIC_REGISTRATION, TOPIC_TELEMETRY
+from ..constants import ENV_MQTT_HOST, ENV_MQTT_PORT, TOPIC_CRASH, TOPIC_OTA, TOPIC_REGISTRATION, TOPIC_TELEMETRY
 from ..data import async_session
 from ..data.models import AppVersion, Device, Telemetry
-from ..data.repositories import AppVersionRepository, DeviceRepository, TelemetryRepository
+from ..data.repositories import AppVersionRepository, DeviceRepository, NotificationRepository, TelemetryRepository, TriggerRepository
+from ..notifications import SlackNotifier
 from ..utils import log_debug, log_error
 
 MQTT_RETRY_DELAY: int = 5
 
 
 class MQTTManager:
-    def __init__(self, version_repo: AppVersionRepository = None, device_repo: DeviceRepository = None, telemetry_repo: TelemetryRepository = None):
-        self.mqtt_host      : str                  = getenv(ENV_MQTT_HOST, 'localhost')
-        self.mqtt_port      : int                  = int(getenv(ENV_MQTT_PORT, '1883'))
-        self.version_repo   : AppVersionRepository = version_repo if version_repo else AppVersionRepository()
-        self.device_repo    : DeviceRepository     = device_repo if device_repo else DeviceRepository()
-        self.telemetry_repo : TelemetryRepository  = telemetry_repo if telemetry_repo else TelemetryRepository()
-        self.queue          : Queue                = Queue()
+    def __init__(self, version_repo: AppVersionRepository = None, device_repo: DeviceRepository = None, notification_repo: NotificationRepository = None, telemetry_repo: TelemetryRepository = None, trigger_repo: TriggerRepository = None) -> None:
+        self.mqtt_host         : str                  = getenv(ENV_MQTT_HOST, 'localhost')
+        self.mqtt_port         : int                  = int(getenv(ENV_MQTT_PORT, '1883'))
+        self.version_repo      : AppVersionRepository = version_repo if version_repo else AppVersionRepository()
+        self.device_repo       : DeviceRepository     = device_repo if device_repo else DeviceRepository()
+        self.notification_repo : NotificationRepository = notification_repo if notification_repo else NotificationRepository()
+        self.telemetry_repo    : TelemetryRepository  = telemetry_repo if telemetry_repo else TelemetryRepository()
+        self.trigger_repo      : TriggerRepository    = trigger_repo if trigger_repo else TriggerRepository()
+        self.queue             : Queue                = Queue()
 
     async def _handle_registration(self, device_id: str, payload: dict) -> None:
         try:
@@ -61,11 +64,11 @@ class MQTTManager:
                     log_debug(f'Device {device_id} is running an outdated version ({current_version} < {latest_version.version})')
 
                     async with Client(self.mqtt_host, self.mqtt_port, identifier=f'espark-core-{hex(getnode())}') as client:
-                        await client.publish(f'{TOPIC_OTP}/{device_id}', dumps({
+                        await client.publish(f'{TOPIC_OTA}/{device_id}', dumps({
                             'device_id'    : device_id,
                             'app_name'     : payload['app_name'],
                             'app_version'  : latest_version.version,
-                            'download_url' : None,
+                            'download_url' : f'/downloads/{payload["app_name"]}/{latest_version.version}',
                         }), qos=1)
         # pylint: disable=broad-exception-caught
         except Exception as e:
@@ -87,6 +90,40 @@ class MQTTManager:
         # pylint: disable=broad-exception-caught
         except Exception as e:
             log_error(e)
+
+        await self._handle_triggers(device_id, payload.get('data_type'), payload.get('value'))
+
+    async def _handle_triggers(self, device_id: str, data_type: str, value: int) -> None:
+        async with async_session() as session:
+            triggers = await self.trigger_repo.list(session)
+            for trigger in triggers:
+                matched_device_id = trigger.device_id is None or trigger.device_id == device_id
+                matched_data_type = trigger.data_type is None or trigger.data_type == data_type
+                if matched_device_id and matched_data_type:
+                    condition_met = False
+                    if trigger.condition is None:
+                        condition_met = True
+                    elif trigger.condition == '==' and value == trigger.value:
+                        condition_met = True
+                    elif trigger.condition == '>' and value > trigger.value:
+                        condition_met = True
+                    elif trigger.condition == '>=' and value >= trigger.value:
+                        condition_met = True
+                    elif trigger.condition == '<' and value < trigger.value:
+                        condition_met = True
+                    elif trigger.condition == '<=' and value <= trigger.value:
+                        condition_met = True
+
+                    if condition_met:
+                        log_debug(f'Trigger {trigger.name} activated for device {device_id} with data type {data_type} and value {value}')
+
+                        notifications = await self.notification_repo.list(session)
+                        for notification in notifications:
+                            if trigger.notification_ids.index(str(notification.id)) != -1:
+                                log_debug(f'Sending notification {notification.name} for trigger {trigger.name}')
+
+                                if notification.provider == 'Slack':
+                                    await SlackNotifier(notification.config['slack_token'], notification.config['slack_channel']).notify(device_id, data_type, value)
 
     async def _process_queue(self) -> None:
         while True:

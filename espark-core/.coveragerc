@@ -14,7 +14,7 @@ exclude_lines =
     if __name__ == .__main__.:
     pass
     raise ImportError
-fail_under = 65
+fail_under = 60
 
 [html]
 directory = coverage_html

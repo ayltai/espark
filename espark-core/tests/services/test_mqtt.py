@@ -54,11 +54,15 @@ async def test_handle_registration_adds_and_updates():
 
 @mark.asyncio
 async def test_handle_telemetry_adds():
-    telemetry_repo = MagicMock()
+    notification_repo = MagicMock()
+    telemetry_repo    = MagicMock()
+    trigger_repo      = MagicMock()
 
-    telemetry_repo.add = AsyncMock()
+    notification_repo.list = AsyncMock(return_value=[])
+    telemetry_repo.add     = AsyncMock()
+    trigger_repo.list      = AsyncMock(return_value=[])
 
-    manager = MQTTManager(telemetry_repo=telemetry_repo)
+    manager = MQTTManager(notification_repo=notification_repo, telemetry_repo=telemetry_repo, trigger_repo=trigger_repo)
 
     payload = {
         'data_type' : 'human_presence',

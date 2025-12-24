@@ -39,10 +39,10 @@ export const DeviceEdit = () => {
                             mode='tags' />
                     </Form.Item>
                     <Form.Item<Device>
-                        validateDebounce={250}
                         name='parameters'
                         label={t('labels.device.parameters')}
                         tooltip={t('labels.device.parameters.tip')}
+                        validateDebounce={250}
                         normalize={value => {
                             if (!value) return value;
 

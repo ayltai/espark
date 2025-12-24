@@ -58,5 +58,5 @@ export const EsparkApp = ({
 
 export type { Device, Telemetry, } from './data/models';
 export { createDataProvider, } from './data';
-export { DeviceEdit, DeviceList, DeviceShow, ResourceEdit, ResourceShow, ResourceList, TelemetryList, } from './pages';
+export { DeviceEdit, DeviceList, DeviceShow, NotificationCreate, NotificationEdit, NotificationList, NotificationShow, ResourceCreate, ResourceEdit, ResourceShow, ResourceList, TelemetryList, TriggerCreate, TriggerEdit, TriggerList, TriggerShow, } from './pages';
 export { camelCaseToSnakeCase, capitaliseFirstLetter, formatMacAddress, snakeCaseToCamelCase, } from './utils/strings';
