@@ -10,7 +10,7 @@ extra_requirements      = (root / 'requirements.dev.txt').read_text().splitlines
 
 setup(
     name='espark-core',
-    version='0.5.3',
+    version='0.5.4',
     description='The core module of the Espark ESP32-based IoT device management framework.',
     long_description=(root / 'README.md').read_text(),
     long_description_content_type='text/markdown',
@@ -18,7 +18,7 @@ setup(
     license_files=[
         'LICENSE',
     ],
-    python_requires='>=3.8',
+    python_requires='>=3.10',
     packages=find_packages(where='.'),
     package_dir={
         '' : '.',

@@ -1,7 +1,8 @@
+import { getDefaultSortOrder, } from '@refinedev/antd';
 import { useNavigation, } from '@refinedev/core';
 import { Button, Table, } from 'antd';
-import { useTranslation, } from 'react-i18next';
 
+import { useTranslation, } from 'react-i18next';
 import type { AppVersion, } from '../data/models';
 import { ResourceList, } from './ResourceList';
 
@@ -11,12 +12,23 @@ export const AppList = () => {
     const { t, } = useTranslation();
 
     return (
-        <ResourceList<AppVersion> resource='apps'>
-            {() => (
+        <ResourceList<AppVersion>
+            resource='apps'
+            sorterProps={{
+                initial : [
+                    {
+                        field : 'id',
+                        order : 'asc',
+                    },
+                ],
+            }}>
+            {({ sorters, }) => (
                 <>
                     <Table.Column<AppVersion>
                         dataIndex='id'
                         title={t('labels.app.appName')}
+                        sorter
+                        defaultSortOrder={getDefaultSortOrder('id', sorters)}
                         render={(value, record) => {
                             const handleClick = () => show('apps', record.id);
 
@@ -36,7 +48,9 @@ export const AppList = () => {
                     <Table.Column<AppVersion>
                         width={250}
                         dataIndex='version'
-                        title={t('labels.app.appVersion')} />
+                        title={t('labels.app.appVersion')}
+                        sorter
+                        defaultSortOrder={getDefaultSortOrder('version', sorters)} />
                 </>
             )}
         </ResourceList>

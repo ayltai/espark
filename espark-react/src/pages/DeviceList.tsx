@@ -1,4 +1,5 @@
 import { CloseCircleFilled, CheckCircleFilled, } from '@ant-design/icons';
+import { getDefaultSortOrder, } from '@refinedev/antd';
 import { useNavigation, } from '@refinedev/core';
 import { Button, Space, Table, Tag, Tooltip, Typography, } from 'antd';
 import { formatDistanceToNow, intlFormat, } from 'date-fns';
@@ -15,8 +16,17 @@ export const DeviceList = () => {
     const { t, } = useTranslation();
 
     return (
-        <ResourceList<Device> resource='devices'>
-            {() => (
+        <ResourceList<Device>
+            resource='devices'
+            sorterProps={{
+                initial : [
+                    {
+                        field : 'appName',
+                        order : 'asc',
+                    },
+                ],
+            }}>
+            {({ sorters, }) => (
                 <>
                     <Table.Column<Device>
                         width={100}
@@ -43,6 +53,8 @@ export const DeviceList = () => {
                         width={200}
                         dataIndex='id'
                         title={t('labels.device.id')}
+                        sorter
+                        defaultSortOrder={getDefaultSortOrder('id', sorters)}
                         render={(value) => (
                             <Typography.Text style={{
                                 fontFamily : 'monospace',
@@ -53,6 +65,8 @@ export const DeviceList = () => {
                     <Table.Column<Device>
                         dataIndex='displayName'
                         title={t('labels.device.displayName')}
+                        sorter
+                        defaultSortOrder={getDefaultSortOrder('displayName', sorters)}
                         render={(value, record) => {
                             const handleClick = () => show('devices', record.id);
 
@@ -73,6 +87,8 @@ export const DeviceList = () => {
                         width={200}
                         dataIndex='appName'
                         title={t('labels.device.appName')}
+                        sorter
+                        defaultSortOrder={getDefaultSortOrder('appName', sorters)}
                         render={value => {
                             if (value) {
                                 const handleClick = () => show('apps', value);
@@ -96,7 +112,9 @@ export const DeviceList = () => {
                     <Table.Column<Device>
                         width={200}
                         dataIndex='appVersion'
-                        title={t('labels.device.appVersion')} />
+                        title={t('labels.device.appVersion')}
+                        sorter
+                        defaultSortOrder={getDefaultSortOrder('appVersion', sorters)} />
                     <Table.Column<Device>
                         width={150}
                         dataIndex='battery'
@@ -126,6 +144,8 @@ export const DeviceList = () => {
                         width={200}
                         dataIndex='lastSeen'
                         title={t('labels.device.lastSeen')}
+                        sorter
+                        defaultSortOrder={getDefaultSortOrder('lastSeen', sorters)}
                         render={(value : string) => (
                             <Tooltip title={
                                 intlFormat(value, {

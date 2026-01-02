@@ -31,10 +31,10 @@ class DeviceRouter(BaseRouter):
 
     def _setup_routes(self) -> None:
         @self.router.get('/all')
-        async def list_all(response: Response, session: AsyncSession = Depends(BaseRouter._get_session), offset: int = Query(None, ge=0), limit: int = Query(None, ge=1, le=100)):
+        async def list_all(response: Response, session: AsyncSession = Depends(BaseRouter._get_session), order_by: str = Query(None), offset: int = Query(0, ge=0), limit: int = Query(10, ge=1, le=100)):
             response.headers['X-Total-Count'] = str(await self.repo.count(session))
 
-            devices                = await self.repo.list(session, offset=offset, limit=limit)
+            devices                = await self.repo.list(session, order_by=order_by, offset=offset, limit=limit)
             devices_with_telemetry = []
             telemetry_repo         = TelemetryRepository()
 

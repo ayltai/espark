@@ -23,7 +23,7 @@
     "labels.device.capabilities.tip"     : "Define device-specific capabilities",
     "labels.device.parameters"           : "Parameters",
     "labels.device.parameters.tip"       : "Define device-specific parameters in JSON format",
-    "labels.device.batteryLevel"         : "Battery Level",
+    "labels.device.battery"              : "Battery Level",
     "labels.device.lastSeen"             : "Last Seen",
     "labels.telemetry.deviceId"          : "Device ID",
     "labels.telemetry.deviceDisplayName" : "Display Name",

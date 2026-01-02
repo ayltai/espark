@@ -1,9 +1,10 @@
+import { getDefaultSortOrder, } from '@refinedev/antd';
 import { useList, useNavigation, } from '@refinedev/core';
 import { Button, Table, Tag, Typography, } from 'antd';
 import { intlFormat, } from 'date-fns';
 import { useTranslation, } from 'react-i18next';
-import stringToColour from 'string-to-color';
 
+import stringToColour from 'string-to-color';
 import type { Device, Telemetry, } from '../data/models';
 import { formatMacAddress, } from '../utils/strings';
 import { ResourceList, } from './ResourceList';
@@ -22,13 +23,24 @@ export const TelemetryList = ({
     const { t, } = useTranslation();
 
     return (
-        <ResourceList<Telemetry> resource='telemetry'>
-            {() => (
+        <ResourceList<Telemetry>
+            resource='telemetry'
+            sorterProps={{
+                initial : [
+                    {
+                        field : 'timestamp',
+                        order : 'desc',
+                    },
+                ],
+            }}>
+            {({ sorters, }) => (
                 <>
                     <Table.Column<Telemetry>
                         width={200}
                         dataIndex='deviceId'
                         title={t('labels.telemetry.deviceId')}
+                        sorter
+                        defaultSortOrder={getDefaultSortOrder('deviceId', sorters)}
                         render={value => (
                             <Typography.Text style={{
                                 fontFamily : 'monospace',
@@ -59,6 +71,8 @@ export const TelemetryList = ({
                         width={200}
                         dataIndex='dataType'
                         title={t('labels.telemetry.dataType')}
+                        sorter
+                        defaultSortOrder={getDefaultSortOrder('dataType', sorters)}
                         render={(value : string) => (
                             <Tag
                                 color={stringToColour(value)}
@@ -78,6 +92,8 @@ export const TelemetryList = ({
                         width={200}
                         dataIndex='timestamp'
                         title={t('labels.telemetry.timestamp')}
+                        sorter
+                        defaultSortOrder={getDefaultSortOrder('timestamp', sorters)}
                         render={value => intlFormat(new Date(value), {
                             dateStyle : 'medium',
                             timeStyle : 'medium',

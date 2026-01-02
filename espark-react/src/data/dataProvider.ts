@@ -4,7 +4,7 @@ import { camelCaseToSnakeCase, snakeCaseToCamelCase, } from '../utils/strings';
 
 export const createDataProvider = (apiEndpoint : string) : DataProvider => ({
     getApiUrl : () => apiEndpoint,
-    getList   : async ({ resource, pagination, }) => {
+    getList   : async ({ resource, pagination, sorters, }) => {
         const query = new URLSearchParams();
 
         if (pagination && pagination.mode !== 'client' && pagination.mode !== 'off') {
@@ -12,6 +12,8 @@ export const createDataProvider = (apiEndpoint : string) : DataProvider => ({
                 query.append('limit', pagination.pageSize.toString());
                 if (pagination.currentPage) query.append('offset', ((pagination.currentPage - 1) * pagination.pageSize).toString());
             }
+
+            if (sorters) query.append('order_by', sorters.map(sorter => `${sorter.field.replace(/(([a-z])(?=[A-Z][a-zA-Z])|([A-Z])(?=[A-Z][a-z]))/g,'$1_').toLowerCase()} ${sorter.order}`).join(','));
         }
 
         const response = await fetch(`${apiEndpoint}/${resource}${resource === 'devices' ? '/all' : ''}${query.size ? `?${camelCaseToSnakeCase(query.toString())}` : ''}`);

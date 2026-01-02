@@ -1,6 +1,6 @@
 from typing import Generic, Optional, Sequence, Type, TypeVar
 
-from sqlalchemy import func, ColumnElement
+from sqlalchemy import ColumnElement, func, text
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select, SQLModel
 
@@ -41,14 +41,14 @@ class AsyncRepository(Generic[T]):
 
         return (await session.execute(query)).scalars().first()
 
-    async def list(self, session: AsyncSession, *conditions: ColumnElement[bool], offset: Optional[int] = None, order_by=None, limit: Optional[int] = None) -> Sequence[T]:
+    async def list(self, session: AsyncSession, *conditions: ColumnElement[bool], offset: Optional[int] = None, order_by: ColumnElement | str = None, limit: Optional[int] = None) -> Sequence[T]:
         query = select(self.model)
 
         if conditions:
             query = query.where(*conditions)
 
         if order_by is not None:
-            query = query.order_by(order_by)
+            query = query.order_by(text(order_by) if isinstance(order_by, str) else order_by)
 
         if offset is not None:
             query = query.offset(offset)

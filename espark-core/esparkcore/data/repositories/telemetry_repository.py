@@ -17,7 +17,7 @@ class TelemetryRepository(AsyncRepository[Telemetry]):
         results = await self.list(session, and_(Telemetry.device_id == device_id, Telemetry.data_type == data_type), order_by=Telemetry.timestamp.desc(), limit=1)
         return results[0] if results else None
 
-    async def list(self, session: AsyncSession, *conditions: ColumnElement[bool], offset: Optional[int] = None, order_by=None, limit: Optional[int] = None) -> Sequence[Telemetry]:
+    async def list(self, session: AsyncSession, *conditions: ColumnElement[bool], offset: Optional[int] = None, order_by: ColumnElement | str = None, limit: Optional[int] = None) -> Sequence[Telemetry]:
         if order_by is None:
             # pylint: disable=no-member
             order_by = Telemetry.timestamp.desc()

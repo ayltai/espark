@@ -1,6 +1,6 @@
 from typing import Generic, List, Sequence, Type, TypeVar
 
-from fastapi import APIRouter, Body, Depends, HTTPException, Query, status, Response
+from fastapi import APIRouter, Body, Depends, HTTPException, Query, status, Response, Path
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import SQLModel
 
@@ -57,7 +57,7 @@ class BaseRouter(Generic[T]):
             return result
 
         @self.router.delete('/{id}', status_code=status.HTTP_204_NO_CONTENT)
-        async def delete(id: str, session: AsyncSession = Depends(BaseRouter._get_session)) -> None:
+        async def delete(id: str = Path(..., min_length=1), session: AsyncSession = Depends(BaseRouter._get_session)) -> None:
             entity = await self.repo.get(session, self.model.id == id)
             if not entity:
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
@@ -67,7 +67,7 @@ class BaseRouter(Generic[T]):
             await self._after_delete(entity, session)
 
         @self.router.get('/{id}', response_model=self.model)
-        async def get(id: str, session: AsyncSession = Depends(BaseRouter._get_session)) -> T:
+        async def get(id: str = Path(..., min_length=1), session: AsyncSession = Depends(BaseRouter._get_session)) -> T:
             entity = await self.repo.get(session, self.model.id == id)
             if not entity:
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
@@ -75,13 +75,13 @@ class BaseRouter(Generic[T]):
             return entity
 
         @self.router.get('/', response_model=List[self.model])
-        async def list(response: Response, session: AsyncSession = Depends(BaseRouter._get_session), offset: int = Query(None, ge=0), limit: int = Query(None, ge=1, le=100)) -> Sequence[T]:
+        async def list(response: Response, session: AsyncSession = Depends(BaseRouter._get_session), order_by: str = Query(None), offset: int = Query(0, ge=0), limit: int = Query(10, ge=1, le=100)) -> Sequence[T]:
             response.headers['X-Total-Count'] = str(await self.repo.count(session))
 
-            return await self.repo.list(session, offset=offset, limit=limit)
+            return await self.repo.list(session, order_by=order_by, offset=offset, limit=limit)
 
         @self.router.put('/{id}', response_model=self.model)
-        async def update(id: str, data: dict = Body(...), session: AsyncSession = Depends(BaseRouter._get_session)) -> T:
+        async def update(id: str = Path(..., min_length=1), data: dict = Body(...), session: AsyncSession = Depends(BaseRouter._get_session)) -> T:
             entity = await self.repo.get(session, self.model.id == id)
             if not entity:
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)

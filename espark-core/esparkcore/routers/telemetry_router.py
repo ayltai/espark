@@ -18,7 +18,7 @@ class TelemetryRouter(BaseRouter):
 
     def _setup_routes(self) -> None:
         @self.router.get('/history', response_model=Sequence[Telemetry])
-        async def list_history(response: Response, session: AsyncSession = Depends(BaseRouter._get_session), device_id: int = Query(..., ge=1), offset: int = Query(..., min=0)) -> Sequence[Telemetry]:
+        async def list_history(response: Response, session: AsyncSession = Depends(BaseRouter._get_session), device_id: str = Query(..., min_length=1), offset: int = Query(0, min=0)) -> Sequence[Telemetry]:
             from_date = datetime.now(timezone.utc) - timedelta(seconds=offset)
             results   = await self.repo.list(session, and_(Telemetry.device_id == device_id, Telemetry.timestamp >= from_date))
 
@@ -27,7 +27,7 @@ class TelemetryRouter(BaseRouter):
             return results
 
         @self.router.get('/recent', response_model=Sequence[Telemetry])
-        async def list_recent(response: Response, session: AsyncSession = Depends(BaseRouter._get_session), offset: int = Query(..., min=0)) -> Sequence[Telemetry]:
+        async def list_recent(response: Response, session: AsyncSession = Depends(BaseRouter._get_session), offset: int = Query(0, min=0)) -> Sequence[Telemetry]:
             from_date   = datetime.now(timezone.utc) - timedelta(seconds=offset)
             device_repo = DeviceRepository()
             # pylint: disable=no-member

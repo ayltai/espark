@@ -1,8 +1,9 @@
+import { getDefaultSortOrder, } from '@refinedev/antd';
 import { useList, useNavigation, } from '@refinedev/core';
 import { Button, Table, Tag, } from 'antd';
 import { useTranslation, } from 'react-i18next';
-import stringToColour from 'string-to-color';
 
+import stringToColour from 'string-to-color';
 import type { Device, Notification, Trigger, } from '../data/models';
 import { ResourceList, } from './ResourceList';
 
@@ -20,12 +21,23 @@ export const TriggerList = () => {
     const { t, } = useTranslation();
 
     return (
-        <ResourceList<Trigger> resource='triggers'>
-            {() => (
+        <ResourceList<Trigger>
+            resource='triggers'
+            sorterProps={{
+                initial : [
+                    {
+                        field : 'name',
+                        order : 'asc',
+                    },
+                ],
+            }}>
+            {({ sorters, }) => (
                 <>
                     <Table.Column<Trigger>
                         dataIndex='name'
                         title={t('labels.trigger.name')}
+                        sorter
+                        defaultSortOrder={getDefaultSortOrder('name', sorters)}
                         render={(value : string, record : Trigger) => {
                             const handleClick = () => show('triggers', record.id!);
 
@@ -66,6 +78,8 @@ export const TriggerList = () => {
                         width={200}
                         dataIndex='dataType'
                         title={t('labels.trigger.dataType')}
+                        sorter
+                        defaultSortOrder={getDefaultSortOrder('dataType', sorters)}
                         render={(value : string) => (
                             <Tag
                                 color={stringToColour(value)}
