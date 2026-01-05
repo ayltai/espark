@@ -29,8 +29,3 @@ pylint:
 
 test:
 	PYTHONPATH=. PYTHONDONTWRITEBYTECODE=1 pytest --cov=esparknode --cov-report=term --cov-report=lcov
-
-deploy:
-	mpremote connect /dev/ttyACM0 cp -r ./esparknode :/esparknode
-	mpremote connect /dev/ttyACM0 cp -r ./src :/src
-	mpremote connect /dev/ttyACM0 cp ./main.py :/main.py

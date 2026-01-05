@@ -57,7 +57,7 @@ vi.mock('antd', async () => ({
         } : any) => (
             <div>
                 <span>{title}</span>
-                {render && render(resourceListData[0][dataIndex])}
+                {render && render(resourceListData[0][dataIndex], resourceListData[0])}
             </div>
         ),
     },

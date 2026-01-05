@@ -119,7 +119,7 @@ export const DeviceList = () => {
                         width={150}
                         dataIndex='battery'
                         title={t('labels.device.battery')}
-                        render={(value : number) => value != null ? (
+                        render={(value : number, record : Device) => record.capabilities?.includes('battery') && value != null ? (
                             <Typography.Text>
                                 {(value / 100.0).toFixed(0)}%
                             </Typography.Text>
