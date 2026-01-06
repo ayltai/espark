@@ -117,7 +117,7 @@ class MQTTManager:
 
                         notifications = await self.notification_repo.list(session)
                         for notification in notifications:
-                            if trigger.notification_ids.index(str(notification.id)) != -1:
+                            if str(notification.id) in trigger.notification_ids:
                                 log_debug(f'Sending notification {notification.name} for trigger {trigger.name}')
 
                                 if notification.provider == 'Slack':
