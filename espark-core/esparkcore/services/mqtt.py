@@ -125,34 +125,37 @@ class MQTTManager:
 
     async def _process_queue(self) -> None:
         while True:
-            topic, payload = await self.queue.get()
-
-            topic_parts: list[str] = str(topic).split('/')
-            if len(topic_parts) != 3:
-                log_error(Exception('Invalid topic format, skipping message'))
-                continue
-
-            app_type, message_type, device_id = topic_parts
-            if app_type != 'espark':
-                log_debug('Invalid app type, skipping message')
-                continue
-
             try:
-                payload = loads(payload.decode())
-            except JSONDecodeError as e:
+                topic, payload = await self.queue.get()
+
+                topic_parts: list[str] = str(topic).split('/')
+                if len(topic_parts) != 3:
+                    log_error(Exception('Invalid topic format, skipping message'))
+                    continue
+
+                app_type, message_type, device_id = topic_parts
+                if app_type != 'espark':
+                    log_debug('Invalid app type, skipping message')
+                    continue
+
+                try:
+                    payload = loads(payload.decode())
+                except JSONDecodeError as e:
+                    log_error(e)
+                    continue
+
+                if message_type == TOPIC_REGISTRATION.split('/')[1]:
+                    await self._handle_registration(device_id, payload)
+                elif message_type == TOPIC_TELEMETRY.split('/')[1]:
+                    await self._handle_telemetry(device_id, payload)
+                elif message_type == TOPIC_CRASH.split('/')[1]:
+                    log_debug(f'Received crash report from device {device_id}: {payload}')
+                else:
+                    log_debug(f'Unknown message type "{message_type}", skipping message')
+
+                self.queue.task_done()
+            except Exception as e:
                 log_error(e)
-                continue
-
-            if message_type == TOPIC_REGISTRATION.split('/')[1]:
-                await self._handle_registration(device_id, payload)
-            elif message_type == TOPIC_TELEMETRY.split('/')[1]:
-                await self._handle_telemetry(device_id, payload)
-            elif message_type == TOPIC_CRASH.split('/')[1]:
-                log_debug(f'Received crash report from device {device_id}: {payload}')
-            else:
-                log_debug(f'Unknown message type "{message_type}", skipping message')
-
-            self.queue.task_done()
 
     async def _process_messages(self) -> None:
         while True:
