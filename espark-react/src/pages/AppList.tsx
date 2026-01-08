@@ -13,6 +13,7 @@ export const AppList = () => {
 
     return (
         <ResourceList<AppVersion>
+            mutable
             resource='apps'
             sorterProps={{
                 initial : [

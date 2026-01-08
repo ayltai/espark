@@ -22,6 +22,7 @@ export const TriggerList = () => {
 
     return (
         <ResourceList<Trigger>
+            mutable
             resource='triggers'
             sorterProps={{
                 initial : [

@@ -17,7 +17,9 @@ export const TriggerShow = () => {
     const { t, } = useTranslation();
 
     return (
-        <ResourceShow<Trigger> resource='triggers'>
+        <ResourceShow<Trigger>
+            mutable
+            resource='triggers'>
             {({ data, }) => (
                 <>
                     <Form.Item<Trigger>

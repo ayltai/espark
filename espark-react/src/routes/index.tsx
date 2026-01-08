@@ -1,7 +1,7 @@
 import { faBell, faBoltLightning, faCloudArrowUp, faMicrochip, faTemperatureFull, } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon, } from '@fortawesome/react-fontawesome';
 
-import { AppEdit, AppList, AppShow, DeviceEdit, DeviceList, DeviceShow, NotificationCreate, NotificationEdit, NotificationList, NotificationShow, TelemetryList, TriggerCreate, TriggerEdit, TriggerList, TriggerShow, } from '../pages';
+import { AppCreate, AppEdit, AppList, AppShow, DeviceEdit, DeviceList, DeviceShow, NotificationCreate, NotificationEdit, NotificationList, NotificationShow, TelemetryList, TriggerCreate, TriggerEdit, TriggerList, TriggerShow, } from '../pages';
 
 export const resources = [
     {
@@ -26,9 +26,10 @@ export const resources = [
             icon  : <FontAwesomeIcon icon={faCloudArrowUp} />,
             label : 'resources.apps',
         },
-        list : '/apps',
-        edit : '/apps/edit/:id',
-        show : '/apps/show/:id',
+        list   : '/apps',
+        create : '/apps/create',
+        edit   : '/apps/edit/:id',
+        show   : '/apps/show/:id',
     }, {
         name : 'notifications',
         meta : {
@@ -81,6 +82,9 @@ export const createRoutes = (transformer? : (value : number, dataType : string) 
             {
                 index     : true,
                 Component : AppList,
+            }, {
+                path      : 'create',
+                Component : AppCreate,
             }, {
                 path      : 'edit/:id',
                 Component : AppEdit,

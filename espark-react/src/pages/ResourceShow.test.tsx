@@ -23,6 +23,9 @@ vi.mock('@refinedev/antd', async () => ({
     EditButton    : (props : any) => (
         <button aria-label={props['aria-label'] || 'edit'}>edit</button>
     ),
+    DeleteButton  : (props : any) => (
+        <button aria-label={props['aria-label'] || 'delete'}>delete</button>
+    ),
     useForm       : () => ({
         form      : {},
         formProps : {},
@@ -55,7 +58,9 @@ describe('<ResourceShow />', () => {
 
     it('renders title, header buttons, and children when data is present', () => {
         const { getByTestId, getByText, } = render(
-            <ResourceShow resource='test'>
+            <ResourceShow
+                mutable
+                resource='test'>
                 {() => <div>ChildContent</div>}
             </ResourceShow>
         );

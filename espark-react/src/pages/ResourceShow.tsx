@@ -1,4 +1,4 @@
-import { EditButton, RefreshButton, Show, useForm, } from '@refinedev/antd';
+import { DeleteButton, EditButton, RefreshButton, Show, useForm, } from '@refinedev/antd';
 import { GetOneResponse, useGo, useShow, } from '@refinedev/core';
 import { Form, Space, Typography, } from 'antd';
 import { type ReactNode, } from 'react';
@@ -6,6 +6,7 @@ import { useTranslation, } from 'react-i18next';
 
 export const ResourceShow = <T extends { id? : number | string, },>({
     resource,
+    mutable = false,
     children,
 } : {
     resource  : string,
@@ -30,7 +31,12 @@ export const ResourceShow = <T extends { id? : number | string, },>({
             headerButtons={
                 <Space>
                     <RefreshButton aria-label={t('actions.refresh')} />
-                    <EditButton aria-label={t('actions.edit')} />
+                    {mutable && (
+                        <>
+                            <EditButton aria-label={t('actions.edit')} />
+                            <DeleteButton aria-label={t('actions.delete')} />
+                        </>
+                    )}
                 </Space>
             }
             headerProps={{

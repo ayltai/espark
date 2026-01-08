@@ -3,6 +3,14 @@ import { DeviceEdit, } from './DeviceEdit';
 
 const mockGetFieldValue = vi.fn();
 
+vi.mock('@refinedev/core', () => ({
+    useList       : () => ({
+        data : {
+            data : [],
+        },
+    }),
+}));
+
 describe('<DeviceEdit />', () => {
     vi.mock('./ResourceEdit', () => ({
         ResourceEdit : ({

@@ -4,6 +4,7 @@
     "resources.devices.details"          : "Device Details",
     "resources.telemetry"                : "Telemetry",
     "resources.apps"                     : "Applications",
+    "resources.apps.create"              : "Create Application",
     "resources.apps.edit"                : "Edit Application",
     "resources.apps.details"             : "Application Details",
     "resources.notifications"            : "Notifications",
@@ -14,6 +15,7 @@
     "resources.triggers.create"          : "Create Trigger",
     "resources.triggers.edit"            : "Edit Trigger",
     "resources.triggers.details"         : "Trigger Details",
+    "label.columns.actions"              : "Actions",
     "labels.device.status"               : "Status",
     "labels.device.id"                   : "Device ID",
     "labels.device.displayName"          : "Display Name",
@@ -30,8 +32,8 @@
     "labels.telemetry.timestamp"         : "Timestamp",
     "labels.telemetry.dataType"          : "Data Type",
     "labels.telemetry.value"             : "Value",
-    "labels.app.appName"                : "Application Name",
-    "labels.app.appVersion"             : "Application Version",
+    "labels.app.appName"                 : "Application Name",
+    "labels.app.appVersion"              : "Application Version",
     "labels.notification.name"           : "Notification Name",
     "labels.notification.provider"       : "Provider",
     "labels.notification.config"         : "Configuration",
@@ -46,5 +48,6 @@
     "errors.required"                    : "{{field}} is required.",
     "errors.invalidFormat"               : "{{field}} has an invalid format.",
     "actions.refresh"                    : "Refresh",
-    "actions.edit"                       : "Edit"
+    "actions.edit"                       : "Edit",
+    "actions.delete"                     : "Delete"
 }

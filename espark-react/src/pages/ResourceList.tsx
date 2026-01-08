@@ -1,12 +1,15 @@
-import { List, useTable, } from '@refinedev/antd';
-import { type CrudSort, type GetListResponse, type HttpError, type useTableProps, } from '@refinedev/core';
-import { Table, Typography, } from 'antd';
-import { type ReactNode, } from 'react';
+import { DeleteButton, EditButton, List, useTable, } from '@refinedev/antd';
+import { type CrudSort, type GetListResponse, type HttpError, useDeleteMany, type useTableProps, } from '@refinedev/core';
+import { Button, Space, Table, type TableProps, Typography, } from 'antd';
+import { type Key, type ReactNode, useState, } from 'react';
 import { useTranslation, } from 'react-i18next';
+
+type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection'];
 
 export const ResourceList = <T extends { id? : number | string, },>({
     resource,
     title,
+    mutable = false,
     extraHeaders,
     filterProps,
     sorterProps,
@@ -14,6 +17,7 @@ export const ResourceList = <T extends { id? : number | string, },>({
 } : {
     resource      : string,
     title?        : string,
+    mutable?      : boolean,
     extraHeaders? : ({
         data,
     } : {
@@ -33,16 +37,47 @@ export const ResourceList = <T extends { id? : number | string, },>({
         data?      : GetListResponse<T>,
     }) => ReactNode,
 }) => {
+    const [ selectedRowKeys, setSelectedRowKeys, ] = useState<Key[]>([]);
+
     const { sorters, tableQuery : { data, isLoading, isSuccess, }, tableProps, } = useTable<T>({
         filters          : filterProps,
         sorters          : sorterProps,
         syncWithLocation : true,
     });
 
+    const { mutate, } = useDeleteMany<T, HttpError>();
+
     const { t, } = useTranslation();
+
+    const rowSelection : TableRowSelection<T> = {
+        selectedRowKeys,
+        onChange : setSelectedRowKeys,
+    };
+
+    const handleDelete = () => {
+        mutate({
+            resource,
+            ids : selectedRowKeys.map(String),
+        });
+
+        setSelectedRowKeys([]);
+    };
 
     return (
         <List
+            headerButtons={({ defaultButtons, }) => (
+                <>
+                    {defaultButtons}
+                    {mutable && (
+                        <Button
+                            aria-label={t('actions.delete')}
+                            disabled={!selectedRowKeys.length}
+                            onClick={handleDelete}>
+                            {t('actions.delete')}
+                        </Button>
+                    )}
+                </>
+            )}
             title={
                 <Typography.Title
                     style={{
@@ -63,13 +98,31 @@ export const ResourceList = <T extends { id? : number | string, },>({
                     ...tableProps.pagination,
                     hideOnSinglePage : true,
                     showSizeChanger  : true,
-                }}>
+                }}
+                rowSelection={mutable ? rowSelection : undefined}>
                 {children?.({
                     sorters,
                     data,
                     isLoading,
                     isSuccess,
                 })}
+                {mutable && (
+                    <Table.Column<T>
+                        width={100}
+                        minWidth={100}
+                        dataIndex='id'
+                        title={t('label.columns.actions')}
+                        render={id => (
+                            <Space>
+                                <EditButton
+                                    hideText
+                                    recordItemId={id} />
+                                <DeleteButton
+                                    hideText
+                                    recordItemId={id} />
+                            </Space>
+                        )} />
+                )}
             </Table>
         </List>
     );

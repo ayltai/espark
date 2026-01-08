@@ -8,7 +8,9 @@ export const NotificationShow = () => {
     const { t, } = useTranslation();
 
     return (
-        <ResourceShow<Notification> resource='notifications'>
+        <ResourceShow<Notification>
+            mutable
+            resource='notifications'>
             {() => (
                 <>
                     <Form.Item<Notification>

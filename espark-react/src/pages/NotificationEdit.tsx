@@ -22,7 +22,10 @@ export const NotificationEdit = () => {
                         <Select
                             allowClear
                             options={[
-                                {},
+                                {
+                                    label : 'Slack',
+                                    value : 'Slack',
+                                },
                             ]} />
                     </Form.Item>
                     <Form.Item<Notification>

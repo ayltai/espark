@@ -17,6 +17,7 @@ export const DeviceList = () => {
 
     return (
         <ResourceList<Device>
+            mutable
             resource='devices'
             sorterProps={{
                 initial : [

@@ -1,10 +1,15 @@
+import { useList, } from '@refinedev/core';
 import { Form, Input, Select, } from 'antd';
 import { useTranslation, } from 'react-i18next';
 
-import type { Device, } from '../data/models';
+import type { AppVersion, Device, } from '../data/models';
 import { ResourceEdit, } from './ResourceEdit';
 
 export const DeviceEdit = () => {
+    const { result : apps, } = useList<AppVersion>({
+        resource : 'apps',
+    });
+
     const { t, } = useTranslation();
 
     return (
@@ -19,7 +24,12 @@ export const DeviceEdit = () => {
                     <Form.Item<Device>
                         name='appName'
                         label={t('labels.device.appName')}>
-                        <Input width='100%' />
+                        <Select options={
+                            apps?.data.map((app : AppVersion) => ({
+                                label : app.id,
+                                value : app.id,
+                            })) ?? []
+                        } />
                     </Form.Item>
                     <Form.Item<Device>
                         name='appVersion'

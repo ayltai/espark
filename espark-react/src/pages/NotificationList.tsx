@@ -13,6 +13,7 @@ export const NotificationList = () => {
 
     return (
         <ResourceList<Notification>
+            mutable
             resource='notifications'
             sorterProps={{
                 initial : [

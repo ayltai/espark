@@ -10,7 +10,9 @@ export const DeviceShow = () => {
     const { t, } = useTranslation();
 
     return (
-        <ResourceShow<Device> resource='devices'>
+        <ResourceShow<Device>
+            mutable
+            resource='devices'>
             {({ data, }) => (
                 <>
                     <Form.Item<Device>
