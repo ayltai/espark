@@ -81,7 +81,7 @@ export const createDataProvider = (apiEndpoint : string) : DataProvider => ({
             method : meta?.method ?? 'DELETE',
         });
 
-        if (response.ok) return {
+        if (response.ok || response.status === 204) return {
             data : snakeCaseToCamelCase(await response.json()),
         };
 

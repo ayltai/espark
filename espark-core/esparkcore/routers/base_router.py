@@ -75,7 +75,7 @@ class BaseRouter(Generic[T]):
             return entity
 
         @self.router.get('/', response_model=List[self.model])
-        async def list(response: Response, session: AsyncSession = Depends(BaseRouter._get_session), order_by: str = Query(None), offset: int = Query(0, ge=0), limit: int = Query(10, ge=1, le=100)) -> Sequence[T]:
+        async def list(response: Response, session: AsyncSession = Depends(BaseRouter._get_session), order_by: str = Query(None), offset: int = Query(0, ge=0), limit: int = Query(10000, ge=1, le=10000)) -> Sequence[T]:
             response.headers['X-Total-Count'] = str(await self.repo.count(session))
 
             return await self.repo.list(session, order_by=order_by, offset=offset, limit=limit)
