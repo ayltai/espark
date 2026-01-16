@@ -23,21 +23,21 @@
   - UI screens: `src/pages/`
   - Routes: `src/routes/`
 
-## Developer Workflows:
+## Developer Workflows
 - **Setting up the backend**:
   1. Add espark-core as a dependency in your FastAPI project.
   2. Configure database connections and MQTT settings as environment variables.
   3. Implement additional data models, repositories, routers, and business logic if needed.
   4. Add the `DeviceRouter`, `TelemetryRouter`, and other additional routers to your FastAPI app.
 - **Setting up the ESP32 device**:
-  1. Clone the espark-node repository to your local machine.
-  2. Copy `espark-core/Makefile.template` to `Makefile` and customize it for your device.
-  3. Run `make upgrade` to copy the espark-core library to your device project.
+  1. Clone the `espark` repository to your local machine.
+  2. Copy `espark-core/Makefile.template` to `Makefile` and customise it for your project.
+  3. Run `make upgrade` to copy the `espark-core` library to your project.
   4. Implement device-specific actions, sensors, and triggers as needed.
   5. Run `make flash` to upload the firmware to your ESP32 device.
-  6. Run `make deploy` to upload the application to the device.
+  6. Run `make deploy` to upload the application code to the device.
 - **Setting up the frontend**:
-  1. Add espark-react as a dependency in your React project.
+  1. Add `espark-react` as a dependency in your React project.
   2. Render `<EsparkApp />` in your main application file.
 
 ## Project-Specific Conventions

@@ -55,7 +55,7 @@ export default defineConfig({
                 'es',
             ],
             name     : 'Espark-React',
-            fileName : format => `index.${ format }.js`,
+            fileName : format => `index.${format}.js`,
         },
         rollupOptions : {
             external : [
