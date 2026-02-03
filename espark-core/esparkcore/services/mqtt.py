@@ -2,7 +2,7 @@ from asyncio import create_task, gather, Queue, sleep
 from datetime import datetime, timezone
 from json import dumps, JSONDecodeError, loads
 from os import getenv
-from uuid import getnode
+from uuid import uuid1
 
 from aiomqtt import Client, MqttError
 from packaging.version import Version
@@ -15,6 +15,8 @@ from ..notifications import SlackNotifier
 from ..utils import log_debug, log_error
 
 MQTT_RETRY_DELAY: int = 5
+
+MQTT_CLIENT_ID: str = f'espark-core-{uuid1()}'
 
 
 class MQTTManager:
@@ -61,7 +63,7 @@ class MQTTManager:
                 if Version(latest_version.version) > current_version:
                     log_debug(f'Device {device_id} is running an outdated version ({current_version} < {latest_version.version})')
 
-                    async with Client(self.mqtt_host, self.mqtt_port, identifier=f'espark-core-{hex(getnode())}') as client:
+                    async with Client(self.mqtt_host, self.mqtt_port, identifier=f'{MQTT_CLIENT_ID}-2') as client:
                         await client.publish(f'{TOPIC_OTA}/{device_id}', dumps({
                             'device_id'    : device_id,
                             'app_name'     : payload['app_name'],
@@ -161,7 +163,7 @@ class MQTTManager:
     async def _process_messages(self) -> None:
         while True:
             try:
-                async with Client(self.mqtt_host, self.mqtt_port, identifier=f'espark-core-{hex(getnode())}') as client:
+                async with Client(self.mqtt_host, self.mqtt_port, identifier=f'{MQTT_CLIENT_ID}-1') as client:
                     await client.subscribe(f'{TOPIC_REGISTRATION}/+')
                     await client.subscribe(f'{TOPIC_TELEMETRY}/+')
                     await client.subscribe(f'{TOPIC_CRASH}/+')
@@ -169,7 +171,7 @@ class MQTTManager:
                     async for message in client.messages:
                         log_debug(f'Received MQTT message on topic {message.topic}')
 
-                        self.queue.put_nowait((message.topic, message.payload))
+                        await self.queue.put((message.topic, message.payload))
             except MqttError as e:
                 log_error(e)
 
