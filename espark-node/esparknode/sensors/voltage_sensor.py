@@ -4,6 +4,8 @@ from machine import ADC, Pin
 from esparknode.sensors.base_sensor import BaseSensor
 from esparknode.utils.logging import log_debug
 
+ADJUSTMENT_FACTOR: float = 1.04
+
 
 class VoltageSensor(BaseSensor):
     def __init__(self, pin: int, voltage_full: float, voltage_empty: float, voltage_divider_ratio: float):
@@ -13,7 +15,7 @@ class VoltageSensor(BaseSensor):
         self.voltage_divider_ratio = voltage_divider_ratio
 
     def _read(self) -> float:
-        value = self.pin.read_uv() / 1_000_000 * self.voltage_divider_ratio
+        value = self.pin.read_uv() / 1_000_000 * self.voltage_divider_ratio * ADJUSTMENT_FACTOR
         log_debug(f'Voltage reading: {value:.3f} V')
 
         return value

@@ -154,6 +154,7 @@ class MQTTManager:
                     log_debug(f'Unknown message type "{message_type}", skipping message')
 
                 self.queue.task_done()
+            # pylint: disable=broad-exception-caught
             except Exception as e:
                 log_error(e)
 

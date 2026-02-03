@@ -1,4 +1,6 @@
 import { CloseCircleFilled, CheckCircleFilled, } from '@ant-design/icons';
+import { faBatteryEmpty, faBatteryFull, faBatteryHalf, faBatteryQuarter, faBatteryThreeQuarters, } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon, } from '@fortawesome/react-fontawesome';
 import { getDefaultSortOrder, } from '@refinedev/antd';
 import { useNavigation, } from '@refinedev/core';
 import { Button, Space, Table, Tag, Tooltip, Typography, } from 'antd';
@@ -121,9 +123,16 @@ export const DeviceList = () => {
                         dataIndex='battery'
                         title={t('labels.device.battery')}
                         render={(value : number, record : Device) => record.capabilities?.includes('battery') && value != null ? (
-                            <Typography.Text>
-                                {(value / 100.0).toFixed(0)}%
-                            </Typography.Text>
+                            <Space>
+                                <FontAwesomeIcon
+                                    style={{
+                                        color : value / 100 >= 90 ? '#4caf50' : value / 100 >= 70 ? '#8bc34a' : value / 100 >= 50 ? '#cddc39' : value / 100 >= 30 ? '#ffeb3b' : value / 100 >= 10 ? '#ff9800' : '#f44336',
+                                    }}
+                                    icon={value / 100.0 >= 87.5 ? faBatteryFull : value / 100.0 >= 62.5 ? faBatteryThreeQuarters : value / 100.0 >= 37.5 ? faBatteryHalf : value / 100.0 >= 12.5 ? faBatteryQuarter : faBatteryEmpty} />
+                                <Typography.Text>
+                                    {(value / 100.0).toFixed(0)}%
+                                </Typography.Text>
+                            </Space>
                         ) : '-'} />
                     <Table.Column<Device>
                         width={200}
