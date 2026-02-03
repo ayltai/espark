@@ -1,4 +1,4 @@
-import { CloseCircleFilled, CheckCircleFilled, } from '@ant-design/icons';
+import { CheckCircleFilled, CloseCircleFilled, ExclamationCircleFilled, } from '@ant-design/icons';
 import { faBatteryEmpty, faBatteryFull, faBatteryHalf, faBatteryQuarter, faBatteryThreeQuarters, } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon, } from '@fortawesome/react-fontawesome';
 import { getDefaultSortOrder, } from '@refinedev/antd';
@@ -42,7 +42,7 @@ export const DeviceList = () => {
                                 color    : '#f44336',
                             }} />
                         ) : new Date().getTime() - new Date(value).getTime() > 45 * 60 * 1000 ? (
-                            <CheckCircleFilled style={{
+                            <ExclamationCircleFilled style={{
                                 fontSize : 16,
                                 color    : '#ffeb3b',
                             }} />
@@ -126,7 +126,7 @@ export const DeviceList = () => {
                             <Space>
                                 <FontAwesomeIcon
                                     style={{
-                                        color : value / 100 >= 90 ? '#4caf50' : value / 100 >= 70 ? '#8bc34a' : value / 100 >= 50 ? '#cddc39' : value / 100 >= 30 ? '#ffeb3b' : value / 100 >= 10 ? '#ff9800' : '#f44336',
+                                        color : value / 100 >= 87.5 ? '#4caf50' : value / 100 >= 62.5 ? '#cddc39' : value / 100 >= 37.5 ? '#ffeb3b' : value / 100 >= 12.5 ? '#ff9800' : '#f44336',
                                     }}
                                     icon={value / 100.0 >= 87.5 ? faBatteryFull : value / 100.0 >= 62.5 ? faBatteryThreeQuarters : value / 100.0 >= 37.5 ? faBatteryHalf : value / 100.0 >= 12.5 ? faBatteryQuarter : faBatteryEmpty} />
                                 <Typography.Text>

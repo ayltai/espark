@@ -14,8 +14,15 @@ class VoltageSensor(BaseSensor):
         self.voltage_empty         = voltage_empty
         self.voltage_divider_ratio = voltage_divider_ratio
 
+    def _read_filtered(self, samples: int = 16, discard: int = 4) -> float:
+        readings = [self.pin.read_uv() for _ in range(samples)]
+        readings.sort()
+        readings = readings[discard:-discard]
+
+        return sum(readings) / len(readings)
+
     def _read(self) -> float:
-        value = self.pin.read_uv() / 1_000_000 * self.voltage_divider_ratio * ADJUSTMENT_FACTOR
+        value = self._read_filtered() / 1_000_000 * self.voltage_divider_ratio * ADJUSTMENT_FACTOR
         log_debug(f'Voltage reading: {value:.3f} V')
 
         return value
