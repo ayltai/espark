@@ -22,12 +22,28 @@ export const TriggerCreate = () => {
                 <>
                     <Form.Item<Trigger>
                         name='name'
-                        label={t('labels.trigger.name')}>
+                        label={t('labels.trigger.name')}
+                        rules={[
+                            {
+                                required : true,
+                                message  : t('errors.required', {
+                                    field : t('labels.trigger.name'),
+                                }),
+                            },
+                        ]}>
                         <Input width='100%' />
                     </Form.Item>
                     <Form.Item<Trigger>
                         name='deviceId'
-                        label={t('labels.trigger.deviceId')}>
+                        label={t('labels.trigger.deviceId')}
+                        rules={[
+                            {
+                                required : true,
+                                message  : t('errors.required', {
+                                    field : t('labels.trigger.deviceId'),
+                                }),
+                            },
+                        ]}>
                         <Select
                             allowClear
                             options={
@@ -39,12 +55,28 @@ export const TriggerCreate = () => {
                     </Form.Item>
                     <Form.Item<Trigger>
                         name='dataType'
-                        label={t('labels.trigger.dataType')}>
+                        label={t('labels.trigger.dataType')}
+                        rules={[
+                            {
+                                required : true,
+                                message  : t('errors.required', {
+                                    field : t('labels.trigger.dataType'),
+                                }),
+                            },
+                        ]}>
                         <Input width='100%' />
                     </Form.Item>
                     <Form.Item<Trigger>
                         name='condition'
-                        label={t('labels.trigger.condition')}>
+                        label={t('labels.trigger.condition')}
+                        rules={[
+                            {
+                                required : true,
+                                message  : t('errors.required', {
+                                    field : t('labels.trigger.condition'),
+                                }),
+                            },
+                        ]}>
                         <Select
                             allowClear
                             options={[
@@ -68,7 +100,15 @@ export const TriggerCreate = () => {
                     </Form.Item>
                     <Form.Item<Trigger>
                         name='value'
-                        label={t('labels.trigger.value')}>
+                        label={t('labels.trigger.value')}
+                        rules={[
+                            {
+                                required : true,
+                                message  : t('errors.required', {
+                                    field : t('labels.trigger.value'),
+                                }),
+                            },
+                        ]}>
                         <Input
                             width='100%'
                             type='number' />
@@ -76,6 +116,14 @@ export const TriggerCreate = () => {
                     <Form.Item<Trigger>
                         name='notificationIds'
                         label={t('labels.trigger.notifications')}
+                        rules={[
+                            {
+                                required : true,
+                                message  : t('errors.required', {
+                                    field : t('labels.trigger.notifications'),
+                                }),
+                            },
+                        ]}
                         getValueProps={(value? : string) => ({
                             value : value ? value.split(',').map(notificationId => Number(notificationId)).map(notificationId => notifications?.data?.find(notification => notification.id === notificationId)?.name) : [],
                         })}

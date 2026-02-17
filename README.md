@@ -17,10 +17,11 @@ Espark is a lightweight framework for building scalable and efficient ESP32-base
 - **Telemetry Collection**: Built-in support for collecting and sending telemetry data.
 - **Scalable Architecture**: Designed to handle a large number of devices efficiently.
 - **Seamless Communication**: Support for MQTT protocol.
+- **Over-the-Air Updates**: Support for OTA application updates.
 
 ## Hardware Requirements
 
-- ESP32 Development Board
+- ESP32-based development board
 - USB Cable for programming and power
 - Optional: Sensors and triggers for specific applications
 

@@ -13,12 +13,28 @@ export const NotificationEdit = () => {
                 <>
                     <Form.Item<Notification>
                         name='name'
-                        label={t('labels.notification.name')}>
+                        label={t('labels.notification.name')}
+                        rules={[
+                            {
+                                required : true,
+                                message  : t('errors.required', {
+                                    field : t('labels.notification.name'),
+                                }),
+                            },
+                        ]}>
                         <Input width='100%' />
                     </Form.Item>
                     <Form.Item<Notification>
                         name='provider'
-                        label={t('labels.notification.provider')}>
+                        label={t('labels.notification.provider')}
+                        rules={[
+                            {
+                                required : true,
+                                message  : t('errors.required', {
+                                    field : t('labels.notification.provider'),
+                                }),
+                            },
+                        ]}>
                         <Select
                             allowClear
                             options={[

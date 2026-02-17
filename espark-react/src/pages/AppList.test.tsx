@@ -5,6 +5,7 @@ const mockList   = vi.fn();
 const mockShow   = vi.fn();
 
 vi.mock('@refinedev/core', () => ({
+    useApiUrl     : () => 'http://localhost:3000',
     useList       : () => ({
         data : {
             data : [],

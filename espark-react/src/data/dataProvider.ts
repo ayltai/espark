@@ -82,7 +82,8 @@ export const createDataProvider = (apiEndpoint : string) : DataProvider => ({
         });
 
         if (response.ok || response.status === 204) return {
-            data : snakeCaseToCamelCase(await response.json()),
+            data : {
+            },
         };
 
         throw response;

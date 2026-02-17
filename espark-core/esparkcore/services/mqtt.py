@@ -68,7 +68,7 @@ class MQTTManager:
                             'device_id'    : device_id,
                             'app_name'     : payload['app_name'],
                             'app_version'  : latest_version.version,
-                            'download_url' : f'/downloads/{payload["app_name"]}/{latest_version.version}',
+                            'download_url' : f'/ota/{payload["app_name"]}/{latest_version.version}/package.json',
                         }), qos=1)
         # pylint: disable=broad-exception-caught
         except Exception as e:
@@ -87,6 +87,10 @@ class MQTTManager:
                 telemetry.value     = payload.get('value')
 
                 await self.telemetry_repo.add(session, telemetry)
+
+                device = await self.device_repo.get(session, Device.id == device_id)
+                if device:
+                    await self.device_repo.update(session, device, last_seen=datetime.now(timezone.utc))
         # pylint: disable=broad-exception-caught
         except Exception as e:
             log_error(e)

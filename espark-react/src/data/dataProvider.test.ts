@@ -88,10 +88,7 @@ describe('createDataProvider', () => {
             id       : 1,
         });
 
-        expect(result.data).toEqual({
-            id   : 1,
-            name : 'Test',
-        });
+        expect(result.data).toEqual({});
 
         expect(fetchMock).toHaveBeenCalledWith(`${API_ENDPOINT}/test/1`, expect.any(Object));
     });
