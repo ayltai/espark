@@ -9,6 +9,7 @@ import { useTranslation, } from 'react-i18next';
 import stringToColour from 'string-to-color';
 
 import type { Device, } from '../data/models';
+import { getContrastColour, } from '../utils/colours';
 import { capitaliseFirstLetter, formatMacAddress, } from '../utils/strings';
 import { ResourceList, } from './ResourceList';
 
@@ -142,6 +143,9 @@ export const DeviceList = () => {
                             <Space>
                                 {value.split(',').map(capability => (
                                     <Tag
+                                        style={{
+                                            color : getContrastColour(stringToColour(capability)),
+                                        }}
                                         key={capability}
                                         color={stringToColour(capability)}
                                         variant='solid'>

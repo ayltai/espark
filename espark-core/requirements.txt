@@ -1,9 +1,9 @@
-aiomqtt>=2.5.0
+aiomqtt>=2.5.1
 apscheduler>=3.11.2
-fastapi>=0.129.0
+fastapi>=0.135.1
 packaging>=25.0
 python-multipart>=0.0.22
-slack-sdk==3.40.0
-sqlalchemy>=2.0.46
-sqlmodel>=0.0.34
+slack-sdk==3.40.1
+sqlalchemy>=2.0.48
+sqlmodel>=0.0.37
 uvicorn[standard]>=0.41.0
