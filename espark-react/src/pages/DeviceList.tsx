@@ -148,7 +148,7 @@ export const DeviceList = () => {
                                         }}
                                         key={capability}
                                         color={stringToColour(capability)}
-                                        variant='solid'>
+                                        variant={capability.startsWith('action_') ? 'outlined' : 'solid'}>
                                         {capability}
                                     </Tag>
                                 ))}

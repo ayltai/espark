@@ -2,9 +2,10 @@ import { getDefaultSortOrder, } from '@refinedev/antd';
 import { useList, useNavigation, } from '@refinedev/core';
 import { Button, Table, Tag, } from 'antd';
 import { useTranslation, } from 'react-i18next';
-
 import stringToColour from 'string-to-color';
+
 import type { Device, Notification, Trigger, } from '../data/models';
+import { getContrastColour, } from '../utils/colours';
 import { ResourceList, } from './ResourceList';
 
 export const TriggerList = () => {
@@ -83,6 +84,9 @@ export const TriggerList = () => {
                         defaultSortOrder={getDefaultSortOrder('dataType', sorters)}
                         render={(value : string) => (
                             <Tag
+                                style={{
+                                    color : getContrastColour(stringToColour(value)),
+                                }}
                                 color={stringToColour(value)}
                                 variant='solid'>
                                 {value}

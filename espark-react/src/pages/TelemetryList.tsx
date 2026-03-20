@@ -6,6 +6,7 @@ import { useTranslation, } from 'react-i18next';
 
 import stringToColour from 'string-to-color';
 import type { Device, Telemetry, } from '../data/models';
+import { getContrastColour, } from '../utils/colours';
 import { formatMacAddress, } from '../utils/strings';
 import { ResourceList, } from './ResourceList';
 
@@ -75,6 +76,9 @@ export const TelemetryList = ({
                         defaultSortOrder={getDefaultSortOrder('dataType', sorters)}
                         render={(value : string) => (
                             <Tag
+                                style={{
+                                    color : getContrastColour(stringToColour(value)),
+                                }}
                                 color={stringToColour(value)}
                                 variant='solid'>
                                 {value}
