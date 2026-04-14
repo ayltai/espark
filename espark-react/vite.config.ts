@@ -1,6 +1,6 @@
 /// <reference types="vitest/config" />
 import react from '@vitejs/plugin-react-swc';
-import { resolve, } from 'path';
+import { isAbsolute, resolve, } from 'path';
 import { defineConfig, } from 'vite';
 
 export default defineConfig({
@@ -58,12 +58,14 @@ export default defineConfig({
             fileName : (format : any) => `index.${format}.js`,
         },
         rollupOptions : {
-            external : [
-                'react',
-                'react/jsx-runtime',
-                'react-dom',
-                'react-router-dom',
-            ],
+            external : (id) => {
+                if (id.startsWith('\0')) return false;
+                if (id.startsWith('.') || id.startsWith('/')) return false;
+                if (isAbsolute(id)) return false;
+
+                // Externalize all bare package imports so ESM output never embeds CJS wrappers.
+                return true;
+            },
             output   : {
                 globals : {
                     react       : 'React',
