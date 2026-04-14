@@ -37,22 +37,27 @@ export const DeviceList = () => {
                         dataIndex='lastSeen'
                         title={t('labels.device.status')}
                         align='center'
-                        render={(value : string) => new Date().getTime() - new Date(value).getTime() > 24 * 60 * 60 * 1000 ? (
-                            <CloseCircleFilled style={{
-                                fontSize : 16,
-                                color    : '#f44336',
-                            }} />
-                        ) : new Date().getTime() - new Date(value).getTime() > 45 * 60 * 1000 ? (
-                            <ExclamationCircleFilled style={{
-                                fontSize : 16,
-                                color    : '#ffeb3b',
-                            }} />
-                        ) : (
-                            <CheckCircleFilled style={{
-                                fontSize : 16,
-                                color    : '#4caf50',
-                            }} />
-                        )} />
+                        render={(value : string) => {
+                            const now        = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000);
+                            const localValue = new Date(new Date(value).getTime() - new Date(value).getTimezoneOffset() * 60000);
+
+                            return now.getTime() - localValue.getTime() > 24 * 60 * 60 * 1000 ? (
+                                <CloseCircleFilled style={{
+                                    fontSize : 16,
+                                    color    : '#f44336',
+                                }} />
+                            ) : now.getTime() - localValue.getTime() > 45 * 60 * 1000 ? (
+                                <ExclamationCircleFilled style={{
+                                    fontSize : 16,
+                                    color    : '#ffeb3b',
+                                }} />
+                            ) : (
+                                <CheckCircleFilled style={{
+                                    fontSize : 16,
+                                    color    : '#4caf50',
+                                }} />
+                            );
+                        }} />
                     <Table.Column<Device>
                         width={200}
                         dataIndex='id'
