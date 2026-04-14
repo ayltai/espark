@@ -98,7 +98,7 @@ export const TelemetryList = ({
                         title={t('labels.telemetry.timestamp')}
                         sorter
                         defaultSortOrder={getDefaultSortOrder('timestamp', sorters)}
-                        render={value => intlFormat(new Date(value), {
+                        render={value => intlFormat(new Date(new Date(value).getTime() - new Date(value).getTimezoneOffset() * 60000), {
                             dateStyle : 'medium',
                             timeStyle : 'medium',
                         }, {

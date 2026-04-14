@@ -160,23 +160,27 @@ export const DeviceList = () => {
                         title={t('labels.device.lastSeen')}
                         sorter
                         defaultSortOrder={getDefaultSortOrder('lastSeen', sorters)}
-                        render={(value : string) => (
-                            <Tooltip title={
-                                intlFormat(value, {
-                                    dateStyle : 'medium',
-                                    timeStyle : 'medium',
-                                }, {
-                                    locale : navigator.language,
-                                })}>
-                                <Typography.Text style={{
-                                    cursor : 'default',
-                                }}>
-                                    {capitaliseFirstLetter(formatDistanceToNow(new Date(value), {
-                                        addSuffix : true,
-                                    }))}
-                                </Typography.Text>
-                            </Tooltip>
-                        )} />
+                        render={(value : string) => {
+                            const localValue = new Date(new Date(value).getTime() - new Date(value).getTimezoneOffset() * 60000);
+
+                            return (
+                                <Tooltip title={
+                                    intlFormat(localValue, {
+                                        dateStyle : 'medium',
+                                        timeStyle : 'medium',
+                                    }, {
+                                        locale : navigator.language,
+                                    })}>
+                                    <Typography.Text style={{
+                                        cursor : 'default',
+                                    }}>
+                                        {capitaliseFirstLetter(formatDistanceToNow(new Date(localValue), {
+                                            addSuffix : true,
+                                        }))}
+                                    </Typography.Text>
+                                </Tooltip>
+                            );
+                        }} />
                 </>
             )}
         </ResourceList>
