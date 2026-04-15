@@ -87,7 +87,8 @@ export const TriggerList = () => {
                                 style={{
                                     color : getContrastColour(stringToColour(value)),
                                 }}
-                                color={stringToColour(value)}>
+                                color={stringToColour(value)}
+                                variant='solid'>
                                 {value}
                             </Tag>
                         )} />

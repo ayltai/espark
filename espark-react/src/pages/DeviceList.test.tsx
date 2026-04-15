@@ -21,7 +21,7 @@ let resourceListData : Record<string, boolean | string | number>[] = [
         id           : 'AABBCCDDEEFF',
         displayName  : 'Test',
         capabilities : 'sensor,actuator',
-        lastSeen     : '2024-01-01T00:00:00Z',
+        lastSeen     : '2026-03-24T01:17:40.526650',
     },
 ];
 
@@ -77,7 +77,7 @@ describe('<DeviceList />', () => {
                 id           : 'AABBCCDDEEFF',
                 displayName  : 'Test',
                 capabilities : 'sensor,actuator',
-                lastSeen     : '2024-01-01T00:00:00Z',
+                lastSeen     : '2026-03-24T01:17:40.526650',
             },
         ];
     });
@@ -106,12 +106,12 @@ describe('<DeviceList />', () => {
                 id           : '1',
                 displayName  : 'Test',
                 capabilities : 'sensor',
-                lastSeen     : new Date().toISOString(),
+                lastSeen     : '2026-03-23T01:17:40.526650',
             }, {
                 id           : '2',
                 displayName  : 'Test2',
                 capabilities : 'actuator',
-                lastSeen     : '2000-01-01T00:00:00Z',
+                lastSeen     : '2026-03-24T01:17:40.526650',
             },
         ];
 

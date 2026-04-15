@@ -37,12 +37,12 @@ export const DeviceList = () => {
                         dataIndex='lastSeen'
                         title={t('labels.device.status')}
                         align='center'
-                        render={(value : string) => new Date().getTime() - new Date(`${value.replace(' ', 'T')}Z`).getTime() > 24 * 60 * 60 * 1000 ? (
+                        render={(value : string) => new Date().getTime() - new Date(`${value.replace(/\.(\d{3})\d+/, '.$1').replace(' ', 'T')}Z`).getTime() > 24 * 60 * 60 * 1000 ? (
                             <CloseCircleFilled style={{
                                 fontSize : 16,
                                 color    : '#f44336',
                             }} />
-                        ) : new Date().getTime() - new Date(`${value.replace(' ', 'T')}Z`).getTime() > 45 * 60 * 1000 ? (
+                        ) : new Date().getTime() - new Date(`${value.replace(/\.(\d{3})\d+/, '.$1').replace(' ', 'T')}Z`).getTime() > 45 * 60 * 1000 ? (
                             <ExclamationCircleFilled style={{
                                 fontSize : 16,
                                 color    : '#ffeb3b',
@@ -147,8 +147,8 @@ export const DeviceList = () => {
                                             color : getContrastColour(stringToColour(capability)),
                                         }}
                                         key={capability}
-                                        bordered={!capability.startsWith('action_')}
-                                        color={stringToColour(capability)}>
+                                        color={stringToColour(capability)}
+                                        variant={capability.startsWith('action_') ? 'outlined' : 'solid'}>
                                         {capability}
                                     </Tag>
                                 ))}
@@ -161,7 +161,9 @@ export const DeviceList = () => {
                         sorter
                         defaultSortOrder={getDefaultSortOrder('lastSeen', sorters)}
                         render={(value : string) => {
-                            const localValue = new Date(`${value.replace(' ', 'T')}Z`);
+                            const localValue = new Date(`${value.replace(/\.(\d{3})\d+/, '.$1').replace(' ', 'T')}Z`);
+
+                            console.log(localValue);
 
                             return (
                                 <Tooltip title={

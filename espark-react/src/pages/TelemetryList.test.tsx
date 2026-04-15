@@ -5,7 +5,7 @@ let resourceListData: Record<string, any>[] = [
     {
         id        : 1,
         deviceId  : 'dev-1',
-        timestamp : '2024-01-01 00:00:00',
+        timestamp : '2026-03-24T01:17:40.526650',
         dataType  : 'doorOpen',
         value     : 42,
     },
@@ -85,7 +85,7 @@ describe('<TelemetryList />', () => {
             {
                 id        : 1,
                 deviceId  : 'dev-1',
-                timestamp : '2024-01-01 00:00:00',
+                timestamp : '2026-03-24T01:17:40.526650',
                 dataType  : 'doorOpen',
                 value     : 42,
             },
@@ -121,7 +121,7 @@ describe('<TelemetryList />', () => {
             {
                 id        : 10,
                 deviceId  : 'dev-1',
-                timestamp : '2024-01-01T00:00:00Z',
+                timestamp : '2026-03-24T01:17:40.526650',
                 dataType  : 'unknown',
                 value     : 5,
             },
