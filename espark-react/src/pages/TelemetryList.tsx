@@ -79,8 +79,7 @@ export const TelemetryList = ({
                                 style={{
                                     color : getContrastColour(stringToColour(value)),
                                 }}
-                                color={stringToColour(value)}
-                                variant='solid'>
+                                color={stringToColour(value)}>
                                 {value}
                             </Tag>
                         )} />
@@ -98,7 +97,7 @@ export const TelemetryList = ({
                         title={t('labels.telemetry.timestamp')}
                         sorter
                         defaultSortOrder={getDefaultSortOrder('timestamp', sorters)}
-                        render={value => intlFormat(new Date(new Date(value).getTime() - new Date(value).getTimezoneOffset() * 60000), {
+                        render={value => intlFormat(new Date(`${value.replace(' ', 'T')}Z`), {
                             dateStyle : 'medium',
                             timeStyle : 'medium',
                         }, {

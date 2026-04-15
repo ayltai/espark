@@ -37,27 +37,22 @@ export const DeviceList = () => {
                         dataIndex='lastSeen'
                         title={t('labels.device.status')}
                         align='center'
-                        render={(value : string) => {
-                            const now        = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000);
-                            const localValue = new Date(new Date(value).getTime() - new Date(value).getTimezoneOffset() * 60000);
-
-                            return now.getTime() - localValue.getTime() > 24 * 60 * 60 * 1000 ? (
-                                <CloseCircleFilled style={{
-                                    fontSize : 16,
-                                    color    : '#f44336',
-                                }} />
-                            ) : now.getTime() - localValue.getTime() > 45 * 60 * 1000 ? (
-                                <ExclamationCircleFilled style={{
-                                    fontSize : 16,
-                                    color    : '#ffeb3b',
-                                }} />
-                            ) : (
-                                <CheckCircleFilled style={{
-                                    fontSize : 16,
-                                    color    : '#4caf50',
-                                }} />
-                            );
-                        }} />
+                        render={(value : string) => new Date().getTime() - new Date(`${value.replace(' ', 'T')}Z`).getTime() > 24 * 60 * 60 * 1000 ? (
+                            <CloseCircleFilled style={{
+                                fontSize : 16,
+                                color    : '#f44336',
+                            }} />
+                        ) : new Date().getTime() - new Date(`${value.replace(' ', 'T')}Z`).getTime() > 45 * 60 * 1000 ? (
+                            <ExclamationCircleFilled style={{
+                                fontSize : 16,
+                                color    : '#ffeb3b',
+                            }} />
+                        ) : (
+                            <CheckCircleFilled style={{
+                                fontSize : 16,
+                                color    : '#4caf50',
+                            }} />
+                        )} />
                     <Table.Column<Device>
                         width={200}
                         dataIndex='id'
@@ -152,8 +147,8 @@ export const DeviceList = () => {
                                             color : getContrastColour(stringToColour(capability)),
                                         }}
                                         key={capability}
-                                        color={stringToColour(capability)}
-                                        variant={capability.startsWith('action_') ? 'outlined' : 'solid'}>
+                                        bordered={!capability.startsWith('action_')}
+                                        color={stringToColour(capability)}>
                                         {capability}
                                     </Tag>
                                 ))}
@@ -166,7 +161,7 @@ export const DeviceList = () => {
                         sorter
                         defaultSortOrder={getDefaultSortOrder('lastSeen', sorters)}
                         render={(value : string) => {
-                            const localValue = new Date(new Date(value).getTime() - new Date(value).getTimezoneOffset() * 60000);
+                            const localValue = new Date(`${value.replace(' ', 'T')}Z`);
 
                             return (
                                 <Tooltip title={
@@ -179,7 +174,7 @@ export const DeviceList = () => {
                                     <Typography.Text style={{
                                         cursor : 'default',
                                     }}>
-                                        {capitaliseFirstLetter(formatDistanceToNow(new Date(localValue), {
+                                        {capitaliseFirstLetter(formatDistanceToNow(localValue, {
                                             addSuffix : true,
                                         }))}
                                     </Typography.Text>

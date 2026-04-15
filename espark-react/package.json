@@ -1,6 +1,6 @@
 {
     "name"             : "espark-react",
-    "version"          : "0.6.8",
+    "version"          : "0.6.9",
     "author"           : {
         "name" : "Alan Tai"
     },
@@ -33,7 +33,7 @@
     ],
     "scripts"          : {
         "clean"   : "pnpm dlx rimraf --glob **/node_modules/* pnpm-lock.yaml",
-        "reset"   : "pnpm clean && pnpm i && pnpm audit -P",
+        "reset"   : "pnpm clean && pnpm i",
         "lint"    : "eslint src",
         "pretest" : "pnpm lint",
         "test"    : "cross-env VITE_COVERAGE=true vitest --run",
@@ -41,8 +41,8 @@
         "build"   : "vite build && tsc -p tsconfig.build.json"
     },
     "peerDependencies" : {
-        "react"     : "^19.2.4",
-        "react-dom" : "^19.2.4"
+        "react"     : "^19.2.5",
+        "react-dom" : "^19.2.5"
     },
     "dependencies"     : {
         "@ant-design/icons"                 : "^6.1.1",
@@ -90,12 +90,6 @@
         "vite"                       : "^8.0.8",
         "vitest"                     : "^4.1.4",
         "vitest-fetch-mock"          : "^0.4.5"
-    },
-    "resolutions"      : {
-        "lodash"         : "^4.18.0",
-        "lodash-es"      : "^4.18.0",
-        "qs"             : "^6.14.2",
-        "path-to-regexp" : "^8.4.0"
     },
     "engines"          : {
         "node" : ">=22",
